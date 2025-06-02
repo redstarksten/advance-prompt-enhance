@@ -1,11 +1,10 @@
 &lt;div align=&quot;center&quot;&gt;
-  &lt;img src=&quot;https://img.icons8.com/fluency/96/artificial-intelligence.png&quot; alt=&quot;Logo Aplikasi AI Prompt Generator&quot; width=&quot;120&quot;/&gt;
+  &lt;img src=&quot;https://img.icons8.com/fluency/96/artificial-intelligence.png&quot; alt=&quot;Logo Aplikasi AI Prompt Generator&quot; width=&quot;120&quot; style=&quot;margin-bottom: 20px;&quot;/&gt;
   &lt;h1&gt;🚀 Aplikasi Prompt Generator &amp; Enhancer Lanjutan 🚀&lt;/h1&gt;
-  &lt;p&gt;
-    &lt;strong&gt;Ubah ide sederhana menjadi prompt AI yang memukau!&lt;/strong&gt; Aplikasi web canggih ini membantu Anda membuat dan menyempurnakan prompt teks berkualitas tinggi untuk berbagai kebutuhan kreatif berbasis AI.
-  &lt;/p&gt;
-  &lt;p&gt;
-    Didukung oleh model AI &lt;strong&gt;Google Gemini&lt;/strong&gt;, alat ini mengubah input Anda menjadi deskripsi detail, terstruktur, dan efektif untuk memandu model AI gambar, video, skenario, hingga narasi.
+  &lt;p style=&quot;font-size: 1.15em; margin-top: 5px; margin-bottom: 15px;&quot;&gt;
+    &lt;strong&gt;Ubah ide sederhana menjadi prompt AI yang memukau!&lt;/strong&gt;
+    &lt;br/&gt;
+    Aplikasi web canggih ini membantu Anda membuat dan menyempurnakan prompt teks berkualitas tinggi untuk berbagai kebutuhan kreatif berbasis AI, didukung oleh model AI &lt;strong&gt;Google Gemini&lt;/strong&gt;.
   &lt;/p&gt;
   &lt;p&gt;
     &lt;a href=&quot;https://github.com/redstarksten/advance-prompt-enhance&quot;&gt;
@@ -16,16 +15,16 @@
 
 -----
 
-## 📖 Daftar Isi
+## 📜 Daftar Isi
 
-  * [✨ Fitur Unggulan](#-fitur-unggulan)
-  * [🖼️ Demo Aplikasi (Segera Hadir\!)](#️-demo-aplikasi-segera-hadir)
-  * [🛠️ Teknologi yang Digunakan](#️-teknologi-yang-digunakan)
-  * [🚀 Panduan Penggunaan](#-panduan-penggunaan)
-  * [🔮 Rencana Pengembangan](#-rencana-pengembangan)
-  * [🤝 Cara Berkontribusi](#-cara-berkontribusi)
-  * [📄 Lisensi](#-lisensi)
-  * [✍️ Kredit](#️-kredit)
+  - [✨ Fitur Unggulan](#-fitur-unggulan)
+  - [🖼️ Demo Aplikasi (Segera Hadir\!)](#️-demo-aplikasi-segera-hadir)
+  - [🛠️ Teknologi yang Digunakan](#️-teknologi-yang-digunakan)
+  - [🚀 Panduan Penggunaan](#-panduan-penggunaan)
+  - [🔮 Rencana Pengembangan](#-rencana-pengembangan)
+  - [🤝 Cara Berkontribusi](#-cara-berkontribusi)
+  - [📄 Lisensi](#-lisensi)
+  - [✍️ Kredit](#️-kredit)
 
 -----
 
@@ -98,7 +97,7 @@ Ikuti langkah-langkah mudah berikut untuk mulai menggunakan aplikasi:
       * Kembali ke aplikasi Prompt Generator, **tempelkan API Key Anda** ke dalam kolom yang disediakan.
       * Klik tombol **"Simpan API Key"**. API Key Anda kini tersimpan aman di browser Anda (menggunakan `localStorage`).
       * *Catatan Penting:*
-          * Tanpa API Key yang valid, fitur yang memanggil AI (peningkatan prompt, generasi gambar, terjemahan) **tidak akan berfungsi**.
+          * Tanpa API Key yang valid, fitur yang memanggil AI (peningkaan prompt, generasi gambar, terjemahan) **tidak akan berfungsi**.
           * API Key Anda disimpan secara lokal di browser Anda dan tidak dikirim ke server kami.
 2.  **🎨 Pilih Mode Prompt:** Tentukan jenis output yang Anda inginkan dengan memilih salah satu dari empat mode: Gambar, Teks ke Video, Adegan Video, atau Narasi.
 3.  **💡 Masukkan Ide Dasar (Opsional):** Tuliskan konsep atau kata kunci utama Anda. Ini akan menjadi titik awal bagi AI untuk mengembangkan prompt.
