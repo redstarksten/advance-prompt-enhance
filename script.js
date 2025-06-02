@@ -261,8 +261,8 @@ const modeRadios = document.querySelectorAll('input[name="mode"]');
             imageGenBtn.disabled = true;
             imageGenBtn.innerHTML = `<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Proses Gambar AI...`;
             
-            imageOutputSection.classList.remove('hidden');
-            generatedImageContainer.innerHTML = '<div class="loader"></div> <p class="ml-4 text-slate-600">Sedang membuat gambar...</p>';
+            
+            
             
             const oldDownloadBtn = document.getElementById('download-image-btn');
             if (oldDownloadBtn) oldDownloadBtn.remove();
@@ -302,7 +302,7 @@ const modeRadios = document.querySelectorAll('input[name="mode"]');
 
                 if (result.predictions && result.predictions.length > 0 && result.predictions[0].bytesBase64Encoded) {
                     const imageUrl = `data:image/png;base64,${result.predictions[0].bytesBase64Encoded}`;
-                    generatedImageContainer.innerHTML = `<img src="${imageUrl}" alt="Generated AI Image">`;
+                    
                     
                     const downloadBtn = document.createElement('button');
                     downloadBtn.id = 'download-image-btn';
@@ -343,8 +343,8 @@ const modeRadios = document.querySelectorAll('input[name="mode"]');
             characterProfileSection.innerHTML = ''; 
             characterProfileSection.classList.add('hidden');
 
-            imageOutputSection.classList.add('hidden'); 
-            generatedImageContainer.innerHTML = '<p class="text-slate-500">Gambar yang dihasilkan akan muncul di sini.</p>';
+             
+            
             
             // Ensure only one "Generate Gambar" button exists, or remove specific ones
             const oldImageGenBtn = document.getElementById('generate-image-btn');
@@ -455,7 +455,7 @@ const modeRadios = document.querySelectorAll('input[name="mode"]');
                     generateImageBtn.innerHTML = '🖼️ Generate Gambar dengan AI';
                     generateImageBtn.disabled = true; 
                     generateImageBtn.addEventListener('click', generateImageWithAI); // This line was causing the error if generateImageWithAI was not defined or removed.
-                    generateButtonsContainer.appendChild(generateImageBtn);
+                    
                     break;
                 case 'veo3': 
                     dynamicPromptStructureContainer.appendChild(createFormGroup("Deskripsi Adegan Lengkap:", createTextarea("veo_scene_desc", 4, "Contoh: Pengejaran mobil di kota malam hari yang hujan")));
@@ -789,8 +789,8 @@ const modeRadios = document.querySelectorAll('input[name="mode"]');
                 prepareDynamicStructure();
                 outputPromptId.value = ""; 
                 outputPromptEn.value = ""; 
-                // imageOutputSection.classList.add('hidden'); // Section removed
-                // generatedImageContainer.innerHTML = '<p class="text-slate-500">Gambar yang dihasilkan akan muncul di sini.</p>'; // Container removed
+                //  // Section removed
+                //  // Container removed
                 const imgGenBtn = document.getElementById('generate-image-btn'); // Button might be removed
                 if (imgGenBtn) imgGenBtn.disabled = true;
             });
