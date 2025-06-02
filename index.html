@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prompt Generator & Enhancer - Hapus Opsi Rasio Gambar</title>
+    <title>Prompt Generator & Enhancer - API Key Pengguna</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -35,17 +35,19 @@
         .peer-checked + .mode-card .mode-icon {
              filter: brightness(0) invert(1);
         }
-        .btn-primary { 
+        .btn-primary, .btn-profile-action, .btn-api { 
             color: white;
             transition: background-color 0.2s, box-shadow 0.2s;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .btn-primary {
             background-color: #334155; /* slate-700 */
         }
         .btn-primary:hover {
             background-color: #1e293b; /* slate-800 */
             box-shadow: 0 4px 8px rgba(0,0,0,0.15);
         }
-        .btn-primary:disabled, .btn-image-gen:disabled, .btn-download:disabled, .btn-profile-action:disabled {
+        .btn-primary:disabled, .btn-image-gen:disabled, .btn-download:disabled, .btn-profile-action:disabled, .btn-api:disabled {
             background-color: #94a3b8; /* slate-400 */
             box-shadow: none;
             cursor: not-allowed;
@@ -93,6 +95,16 @@
         .btn-profile-delete:hover { background-color: #dc2626; /* red-600 */ }
         .btn-profile-delete-all { background-color: #f97316; /* orange-500 */ }
         .btn-profile-delete-all:hover { background-color: #ea580c; /* orange-600 */ }
+        .btn-api {
+            padding: 0.625rem 1.25rem; /* py-2.5 px-5 */
+            font-size: 0.875rem; /* text-sm */
+            border-radius: 0.375rem; /* rounded-md */
+        }
+        .btn-get-api { background-color: #6366f1; /* indigo-500 */ }
+        .btn-get-api:hover { background-color: #4f46e5; /* indigo-600 */ }
+        .btn-save-api { background-color: #10b981; /* emerald-500 */ }
+        .btn-save-api:hover { background-color: #059669; /* emerald-600 */ }
+
 
         .toast {
             position: fixed;
@@ -163,11 +175,18 @@
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .profile-management-section {
-            border: 1px solid #e2e8f0; /* slate-200 */
+            border: 1px solid #e2e8f0; 
             padding: 1.5rem;
-            border-radius: 0.5rem; /* rounded-lg */
+            border-radius: 0.5rem; 
             margin-top: 1.5rem;
-            background-color: #f8fafc; /* slate-50 */
+            background-color: #f8fafc; 
+        }
+        .api-key-section {
+            background-color: #e0f2fe; /* sky-100 */
+            border: 1px solid #bae6fd; /* sky-200 */
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            margin-bottom: 2rem;
         }
     </style>
 </head>
@@ -177,6 +196,21 @@
             <h1 class="text-3xl sm:text-4xl font-semibold text-slate-800">Prompt Generator & Enhancer</h1>
             <p class="text-slate-600 mt-4 text-base md:text-lg">Susun, tingkatkan, dan dapatkan prompt serta gambar AI.</p>
         </header>
+
+        <section class="api-key-section">
+            <h2 class="text-xl font-semibold text-sky-800 mb-4">Pengaturan API Key Gemini Anda</h2>
+            <div class="input-group">
+                <label for="user-api-key" class="text-sky-700">Masukkan API Key Anda:</label>
+                <input type="password" id="user-api-key" class="input-field" placeholder="AIzaSy...">
+            </div>
+            <div class="flex flex-wrap gap-3 items-center">
+                <button id="save-api-key-btn" class="btn-api btn-save-api">Simpan API Key</button>
+                <a href="https://aistudio.google.com/app/apikey?hl=id" target="_blank" rel="noopener noreferrer" id="get-api-key-btn" class="btn-api btn-get-api">Dapatkan API Key</a>
+                <button id="clear-api-key-btn" class="btn-api btn-profile-delete text-xs">Hapus API Key Tersimpan</button>
+            </div>
+            <p id="api-key-status" class="text-xs text-sky-600 mt-2"></p>
+        </section>
+
 
         <section class="mb-12">
             <h2 class="text-xl font-semibold text-slate-700 mb-5">1. Pilih Mode Prompt:</h2>
@@ -285,15 +319,19 @@
         const toastNotification = document.getElementById('toast-notification');
         const CUSTOM_OPTION_VALUE = "Isi Sendiri...";
         const CHARACTER_PROFILES_KEY = 'characterPromptProfiles';
+        const USER_API_KEY_LS_KEY = 'userGeminiApiKey'; // localStorage key for API key
 
+        const userApiKeyInput = document.getElementById('user-api-key');
+        const saveApiKeyBtn = document.getElementById('save-api-key-btn');
+        const clearApiKeyBtn = document.getElementById('clear-api-key-btn');
+        const apiKeyStatus = document.getElementById('api-key-status');
 
-        // --- Opsi untuk Dropdown ---
+        // --- Opsi untuk Dropdown (Sama seperti v16) ---
         const imageOptions = {
             styles: ["Lukisan Digital", "Fotorealistik", "Seni Konsep", "Gaya Anime", "Surealis", "Abstrak", "Kartun", "Pixel Art", "Gaya Komik", "Fotografi Hitam Putih", "Lukisan Cat Air", "Gaya Steampunk", "Fantasi Gelap", CUSTOM_OPTION_VALUE],
             lightings: ["Pencahayaan Sinematik", "Cahaya Lembut Alami", "Dramatis (Bayangan Kuat)", "Neon Glow", "Golden Hour", "Studio Lighting", "Rembrandt Lighting", "Cahaya Bulan", "Lampu Jalanan", "Cahaya Volumetrik", "Rim Lighting", CUSTOM_OPTION_VALUE],
             compositions: ["Close-up Detail", "Medium Shot Dinamis", "Wide Shot Epik", "Pandangan Mata Burung", "Sudut Rendah Heroik", "Eye-Level Natural", "Dutch Angle Dramatis", "Portrait Artistik", "Landscape Luas", "Aturan Sepertiga", CUSTOM_OPTION_VALUE],
             colors: ["Palet Warna Hangat Menyala", "Palet Warna Dingin Menenangkan", "Monokromatik Artistik", "Warna Pastel Lembut", "Warna Cerah & Jenuh", "Sepia Nostalgia", "Hitam Putih dengan Aksen Warna", "Gradasi Warna Halus", "Warna Komplementer Berani", CUSTOM_OPTION_VALUE],
-            // aspectRatios is REMOVED
             outfits: ["Kasual Modern", "Formal (Jas/Gaun)", "Pakaian Tradisional [Sebutkan Budaya]", "Kostum Fantasi", "Pakaian Olahraga", "Seragam Sekolah/Kerja", "Gaya Vintage [Sebutkan Era]", "Futuristik", "Pakaian Petualang", "Jubah Misterius", CUSTOM_OPTION_VALUE],
             timesOfDayImg: ["Pagi Cerah Bersinar", "Siang Terik Menyengat", "Sore Emas (Golden Hour)", "Senja Magis (Twilight)", "Malam Berbintang Gemerlap", "Malam Berkabut Misterius", "Subuh Tenang", "Badai Petir Menggelegar", CUSTOM_OPTION_VALUE],
             locations: ["Hutan Ajaib Berkabut", "Kota Metropolitan Malam Hari Penuh Neon", "Pantai Tropis Pasir Putih", "Pegunungan Bersalju Megah", "Ruang Angkasa Luas Tak Terbatas", "Interior Kafe Nyaman dengan Cahaya Hangat", "Perpustakaan Kuno Penuh Buku", "Padang Pasir Luas Mencekam", "Dasar Laut Penuh Kehidupan", "Kastil Tua Reruntuhan", "Desa Pedesaan Damai", CUSTOM_OPTION_VALUE],
@@ -660,10 +698,64 @@
             return el ? el.value.trim() : "";
         }
 
+        // --- API Key Management ---
+        function getStoredApiKey() {
+            return localStorage.getItem(USER_API_KEY_LS_KEY);
+        }
+
+        function saveUserApiKey() {
+            const key = userApiKeyInput.value.trim();
+            if (key) {
+                localStorage.setItem(USER_API_KEY_LS_KEY, key);
+                apiKeyStatus.textContent = "API Key disimpan!";
+                apiKeyStatus.className = "text-xs text-green-600 mt-2";
+                showToast("API Key berhasil disimpan!", "success");
+            } else {
+                apiKeyStatus.textContent = "Masukkan API Key terlebih dahulu.";
+                apiKeyStatus.className = "text-xs text-red-600 mt-2";
+                showToast("API Key tidak boleh kosong.", "error");
+            }
+        }
+        function clearUserApiKey() {
+            if (confirm("Apakah Anda yakin ingin menghapus API Key yang tersimpan?")) {
+                localStorage.removeItem(USER_API_KEY_LS_KEY);
+                userApiKeyInput.value = "";
+                apiKeyStatus.textContent = "API Key telah dihapus.";
+                apiKeyStatus.className = "text-xs text-slate-600 mt-2";
+                showToast("API Key berhasil dihapus.", "info");
+            }
+        }
+        
+        function loadUserApiKey() {
+            const storedKey = getStoredApiKey();
+            if (storedKey) {
+                userApiKeyInput.value = storedKey;
+                apiKeyStatus.textContent = "API Key berhasil dimuat dari penyimpanan.";
+                apiKeyStatus.className = "text-xs text-green-600 mt-2";
+            } else {
+                apiKeyStatus.textContent = "Tidak ada API Key tersimpan. Silakan masukkan.";
+                apiKeyStatus.className = "text-xs text-slate-600 mt-2";
+            }
+        }
+
+
         async function callGeminiAPI(promptText, model = "gemini-2.0-flash") {
-            const apiKey = ""; 
+            let currentApiKey = getStoredApiKey();
+            if (!currentApiKey) {
+                // Fallback to Canvas-injected key if user hasn't provided one
+                // However, for user-facing app, it's better to enforce user key
+                // For now, let's assume Canvas might inject one if user's is missing
+                // but ideally, we'd block the call if no key is available.
+                const canvasInjectedKey = ""; // This would be the __api_key__ or similar if provided by Canvas
+                currentApiKey = canvasInjectedKey; 
+                if (!currentApiKey) {
+                     showToast("API Key tidak ditemukan. Harap masukkan API Key Anda.", "error");
+                     throw new Error("API Key tidak ditemukan. Harap masukkan API Key Anda di bagian Pengaturan API Key.");
+                }
+            }
+            
             const modelPath = model.includes(":") ? model : `models/${model}`;
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/${modelPath}:generateContent?key=${apiKey}`;
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/${modelPath}:generateContent?key=${currentApiKey}`;
             
             let chatHistory = [{ role: "user", parts: [{ text: promptText }] }];
             const payload = { contents: chatHistory };
@@ -676,8 +768,8 @@
 
             if (!response.ok) {
                 let errorText = `API request to ${modelPath} failed status ${response.status}: ${response.statusText}`;
-                if (response.status === 401) {
-                    errorText = `API request to ${modelPath} failed with status 401: Unauthorized. Please check your API key or environment configuration.`;
+                if (response.status === 401 || response.status === 403) { // Handle 401 Unauthorized and 403 Forbidden
+                    errorText = `Gagal menghubungi API ${modelPath} (Status ${response.status}): Masalah otentikasi atau izin. Pastikan API Key Anda valid dan memiliki izin yang benar.`;
                 } else {
                     try {
                         const errorData = await response.json();
@@ -719,7 +811,7 @@
 
             let basePromptDetails = "";
             let enhancerInstruction = "";
-            let originalDialog = ""; // For Veo3 mode
+            let originalDialog = ""; 
 
             switch (mode) {
                 case 'image':
@@ -749,7 +841,6 @@
                                       `Pencahayaan: ${getVal('img_lighting', true)}\n` +
                                       `Skema Warna: ${getVal('img_colors', true)}\n` +
                                       `Komposisi/Sudut Pandang: ${getVal('img_composition', true)}\n` +
-                                      // Aspect ratio removed
                                       `Detail Tambahan/Modifier: ${getVal('img_details') || "Tidak ada"}` +
                                       characterBlock; 
 
@@ -833,9 +924,6 @@
             }
         }
 
-        async function generateImageWithAI() { /* ... (Sama seperti v15) ... */ }
-        
-        // Re-implementasi generateImageWithAI
         async function generateImageWithAI() {
             const imageGenBtn = document.getElementById('generate-image-btn');
             if (!imageGenBtn) return;
@@ -845,6 +933,19 @@
                 showToast("Harap hasilkan dan tingkatkan teks prompt terlebih dahulu.", "info");
                 return;
             }
+            
+            let currentApiKey = getStoredApiKey();
+            if (!currentApiKey) {
+                 const canvasInjectedKey = ""; 
+                 currentApiKey = canvasInjectedKey;
+                 if (!currentApiKey) {
+                    showToast("API Key tidak ditemukan untuk generasi gambar. Harap masukkan API Key Anda.", "error");
+                    imageGenBtn.disabled = false;
+                    imageGenBtn.innerHTML = "🖼️ Generate Gambar dengan AI";
+                    return;
+                 }
+            }
+
 
             imageGenBtn.disabled = true;
             imageGenBtn.innerHTML = `<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Proses Gambar AI...`;
@@ -856,8 +957,8 @@
             if (oldDownloadBtn) oldDownloadBtn.remove();
 
             const payload = { instances: [{ prompt: textPromptForImage }], parameters: { "sampleCount": 1 } };
-            const apiKey = ""; 
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
+            // API Key for Imagen is now taken from getStoredApiKey() or fallback
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${currentApiKey}`;
 
             try {
                 const response = await fetch(apiUrl, {
@@ -868,8 +969,8 @@
 
                 if (!response.ok) {
                     let errorText = `Imagen API request failed status ${response.status}: ${response.statusText}`;
-                     if (response.status === 401) {
-                        errorText = "Gagal membuat gambar: Masalah otentikasi dengan API Gambar (401). Pastikan API key valid atau lingkungan dikonfigurasi dengan benar.";
+                     if (response.status === 401 || response.status === 403) {
+                        errorText = "Gagal membuat gambar: Masalah otentikasi atau izin dengan API Gambar (" + response.status + "). Pastikan API Key Anda valid dan memiliki izin yang benar.";
                     } else {
                         try {
                             const errorData = await response.json();
@@ -951,6 +1052,10 @@
 
         generateEnhanceBtn.addEventListener('click', generateAndEnhancePrompt);
 
+        saveApiKeyBtn.addEventListener('click', saveUserApiKey);
+        clearApiKeyBtn.addEventListener('click', clearUserApiKey);
+
+
         function setupCopyButton(buttonId, textareaId, langName) { /* ... (Sama seperti v12) ... */ }
         setupCopyButton('copy-btn-id', 'output-prompt-id', 'ID');
         setupCopyButton('copy-btn-en', 'output-prompt-en', 'EN');
@@ -995,6 +1100,7 @@
         }
 
         // Inisialisasi awal
+        loadUserApiKey(); // Load API key on start
         prepareDynamicStructure();
         if (document.querySelector('input[name="mode"]:checked').value === 'image') {
             setTimeout(() => {
