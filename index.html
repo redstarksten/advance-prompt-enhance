@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prompt Generator & Enhancer - Karakter Konsisten & Profil</title>
+    <title>Prompt Generator & Enhancer</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -11,11 +11,13 @@
             font-family: 'Inter', sans-serif;
             background-color: #f8fafc; /* slate-50 */
             color: #334155; /* slate-700 */
+            transition-colors: duration-300; /* Transisi warna dasar */
         }
         .main-container {
             background-color: white;
             border-radius: 0.75rem; /* rounded-xl */
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            transition-colors: duration-300;
         }
         .mode-card {
             transition: all 0.25s ease-in-out;
@@ -35,6 +37,7 @@
         .peer-checked + .mode-card .mode-icon {
              filter: brightness(0) invert(1);
         }
+        
         .btn-primary, .btn-profile-action, .btn-api { 
             color: white;
             transition: background-color 0.2s, box-shadow 0.2s;
@@ -47,7 +50,7 @@
             background-color: #1e293b; /* slate-800 */
             box-shadow: 0 4px 8px rgba(0,0,0,0.15);
         }
-        .btn-primary:disabled, .btn-image-gen:disabled, .btn-download:disabled, .btn-profile-action:disabled, .btn-api:disabled {
+        .btn-primary:disabled, .btn-profile-action:disabled, .btn-api:disabled { /* Removed .btn-image-gen, .btn-download */
             background-color: #94a3b8; /* slate-400 */
             box-shadow: none;
             cursor: not-allowed;
@@ -62,26 +65,7 @@
             background-color: #e2e8f0; /* slate-200 */
             border-color: #cbd5e1; /* slate-300 */
         }
-        .btn-image-gen { 
-            background-color: #059669; /* emerald-600 */
-            color: white;
-            transition: background-color 0.2s, box-shadow 0.2s;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .btn-image-gen:hover {
-            background-color: #047857; /* emerald-700 */
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-        }
-        .btn-download { 
-            background-color: #0ea5e9; /* sky-500 */
-            color: white;
-            transition: background-color 0.2s, box-shadow 0.2s;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .btn-download:hover {
-            background-color: #0284c7; /* sky-600 */
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-        }
+        
         .btn-profile-action {
             padding: 0.5rem 1rem;
             font-size: 0.875rem;
@@ -95,6 +79,7 @@
         .btn-profile-delete:hover { background-color: #dc2626; /* red-600 */ }
         .btn-profile-delete-all { background-color: #f97316; /* orange-500 */ }
         .btn-profile-delete-all:hover { background-color: #ea580c; /* orange-600 */ }
+
         .btn-api {
             padding: 0.625rem 1.25rem; /* py-2.5 px-5 */
             font-size: 0.875rem; /* text-sm */
@@ -127,55 +112,31 @@
         }
         .input-group { margin-bottom: 1.5rem; }
         .input-group label { display: block; margin-bottom: 0.625rem; font-weight: 500; color: #475569; font-size: 0.95rem; }
+        
         .input-field, .input-group input[type="text"], .input-group input[type="password"], .input-group textarea, .input-group select {
             width: 100%; padding: 0.875rem 1.125rem; border: 1px solid #cbd5e1; 
             border-radius: 0.5rem; background-color: white; color: #334155; 
             transition: box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out; font-size: 0.95rem;
         }
-        .input-field::placeholder, .input-group input[type="text"]::placeholder, .input-group input[type="password"]::placeholder, .input-group textarea::placeholder { color: #94a3b8; }
+        .input-field::placeholder, .input-group input[type="text"]::placeholder, .input-group input[type="password"]::placeholder, .input-group textarea::placeholder { 
+            color: #94a3b8; 
+        }
         .input-field:focus, .input-group input[type="text"]:focus, .input-group input[type="password"]:focus, .input-group textarea:focus, .input-group select:focus {
             outline: none; border-color: #4f46e5; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15); 
         }
+
         .custom-input-container { display: flex; gap: 0.75rem; align-items: center; }
         .custom-input-container select { flex-grow: 1; }
         .custom-input-field { flex-grow: 2; }
+
         #dynamic-prompt-structure-container { background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 1.5rem; border-radius: 0.5rem; }
         #dynamic-prompt-structure-container h3 { color: #1e293b; }
+        
         textarea::-webkit-scrollbar { width: 8px; }
         textarea::-webkit-scrollbar-track { background: #e2e8f0; border-radius: 10px; }
         textarea::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 10px; }
         textarea::-webkit-scrollbar-thumb:hover { background: #64748b; }
 
-        #generated-image-container { 
-            margin-top: 1rem; 
-            padding: 1.5rem;
-            border: 1px solid #e2e8f0; 
-            border-radius: 0.5rem; 
-            background-color: #f8fafc; 
-            min-height: 150px; 
-            display: flex;
-            flex-direction: column; 
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-        #generated-image-container img {
-            max-width: 100%;
-            max-height: 400px; 
-            border-radius: 0.375rem; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            margin-bottom: 1rem; 
-        }
-        .loader {
-            border: 5px solid #e2e8f0; 
-            border-top: 5px solid #475569; 
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin-bottom: 0.75rem; 
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .profile-management-section {
             border: 1px solid #e2e8f0; 
             padding: 1.5rem;
@@ -190,14 +151,17 @@
             border-radius: 0.5rem;
             margin-bottom: 2rem;
         }
+         .footer-link svg { transition-colors: duration-200; }
+        .footer-link:hover svg { color: #4f46e5; /* indigo-600 */ }
+
     </style>
 </head>
 <body class="p-4 md:p-10"> 
     <div class="main-container container mx-auto max-w-5xl p-6 md:p-10"> 
-        <header class="text-center mb-12 pb-6 border-b border-slate-200"> 
+        <header class="text-center mb-12 pb-6 border-b border-slate-200 relative"> 
             <h1 class="text-3xl sm:text-4xl font-semibold text-slate-800">Prompt Generator & Enhancer</h1>
-            <p class="text-slate-600 mt-4 text-base md:text-lg">Susun, tingkatkan, dan dapatkan prompt serta gambar AI.</p>
-        </header>
+            <p class="text-slate-600 mt-4 text-base md:text-lg">Susun, tingkatkan, dan dapatkan prompt AI yang optimal.</p>
+            </header>
 
         <section class="api-key-section">
             <h2 class="text-xl font-semibold text-sky-800 mb-4">Pengaturan API Key Gemini Anda</h2>
@@ -223,25 +187,25 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                 <div>
                     <input type="radio" name="mode" id="image-mode" value="image" class="hidden peer" checked>
-                    <label for="image-mode" class="mode-card block p-5 rounded-lg cursor-pointer text-center">
+                    <label for="image-mode" class="mode-card">
                         <span class="mode-icon text-3xl">🖼️</span><p class="font-medium mt-2 text-sm">Gambar</p>
                     </label>
                 </div>
                 <div>
                     <input type="radio" name="mode" id="veo3-mode" value="veo3" class="hidden peer">
-                    <label for="veo3-mode" class="mode-card block p-5 rounded-lg cursor-pointer text-center">
+                    <label for="veo3-mode" class="mode-card">
                         <span class="mode-icon text-3xl">🎬</span><p class="font-medium mt-2 text-sm">Teks ke Video</p>
                     </label>
                 </div>
                 <div>
                     <input type="radio" name="mode" id="scene-mode" value="scene" class="hidden peer">
-                    <label for="scene-mode" class="mode-card block p-5 rounded-lg cursor-pointer text-center">
+                    <label for="scene-mode" class="mode-card">
                         <span class="mode-icon text-3xl">🎞️</span><p class="font-medium mt-2 text-sm">Adegan Video</p>
                     </label>
                 </div>
                 <div>
                     <input type="radio" name="mode" id="narration-mode" value="narration" class="hidden peer">
-                    <label for="narration-mode" class="mode-card block p-5 rounded-lg cursor-pointer text-center">
+                    <label for="narration-mode" class="mode-card">
                         <span class="mode-icon text-3xl">🗣️</span><p class="font-medium mt-2 text-sm">Narasi</p>
                     </label>
                 </div>
@@ -261,8 +225,8 @@
             <div id="character-profile-section" class="hidden profile-management-section"></div>
         </section>
 
-        <div id="generate-buttons-container" class="text-center mb-12 space-y-4 sm:space-y-0 sm:space-x-4 flex flex-wrap justify-center items-center">
-             <button id="generate-enhance-btn" class="btn-primary font-semibold py-3.5 px-8 rounded-lg text-base order-1">
+        <div id="generate-buttons-container" class="text-center mb-12">
+             <button id="generate-enhance-btn" class="btn-primary font-semibold py-3.5 px-8 rounded-lg text-base">
                 ✨ Hasilkan & Tingkatkan Teks Prompt
             </button>
             </div>
@@ -284,22 +248,19 @@
             </div>
         </section>
 
-        <section id="image-output-section" class="hidden mb-12">
-            <h2 class="text-xl font-semibold text-slate-700 mb-5">Hasil Gambar AI:</h2>
-            <div id="generated-image-container">
-                <p class="text-slate-500">Gambar yang dihasilkan akan muncul di sini.</p>
-                </div>
-        </section>
-
         <footer class="mt-16 pt-8 border-t border-slate-200 text-center text-slate-500 text-sm">
-            <p class="flex items-center justify-center">
-                madeci 
-                <a href="https://www.facebook.com/madeciahmad" target="_blank" rel="noopener noreferrer" class="ml-2 text-slate-500 hover:text-blue-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm3 8h-1.35c-.538 0-.65.221-.65.778v1.222h2l-.209 2h-1.791v7h-3v-7h-2v-2h2v-2.308c0-1.769.931-2.692 3.029-2.692h1.971v3z"/>
-                    </svg>
+            <p class="mb-2">Dibuat oleh: madeci</p>
+            <div class="flex items-center justify-center space-x-4">
+                <a href="https://github.com/redstarksten/advance-prompt-enhance" target="_blank" rel="noopener noreferrer" class="footer-link flex items-center text-slate-500 hover:text-slate-700">
+                    <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.23-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22l.005 3.293c0 .315.19.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                    <span class="ml-1.5">GitHub Repo</span>
                 </a>
-            </p>
+                <span class="text-slate-300">|</span>
+                <a href="https://www.facebook.com/share/19P3TgmDUt/" target="_blank" rel="noopener noreferrer" class="footer-link flex items-center text-slate-500 hover:text-blue-600">
+                    <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"><title>Facebook</title><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                    <span class="ml-1.5">Facebook</span>
+                </a>
+            </div>
         </footer>
     </div>
 
@@ -318,9 +279,6 @@
         const outputPromptEn = document.getElementById('output-prompt-en');
         const copyBtnId = document.getElementById('copy-btn-id');
         const copyBtnEn = document.getElementById('copy-btn-en');
-
-        const imageOutputSection = document.getElementById('image-output-section');
-        const generatedImageContainer = document.getElementById('generated-image-container');
         
         const toastNotification = document.getElementById('toast-notification');
         const CUSTOM_OPTION_VALUE = "Isi Sendiri...";
@@ -335,9 +293,10 @@
         const apiKeyInputContainer = document.getElementById('api-key-input-container');
         const apiKeyDisplayContainer = document.getElementById('api-key-display-container');
         const apiKeyStatusDisplay = document.getElementById('api-key-status-display');
+        // Theme related variables are removed
 
 
-        // --- Opsi untuk Dropdown (Sama seperti v16) ---
+        // --- Opsi untuk Dropdown ---
         const imageOptions = {
             styles: ["Lukisan Digital", "Fotorealistik", "Seni Konsep", "Gaya Anime", "Surealis", "Abstrak", "Kartun", "Pixel Art", "Gaya Komik", "Fotografi Hitam Putih", "Lukisan Cat Air", "Gaya Steampunk", "Fantasi Gelap", CUSTOM_OPTION_VALUE],
             lightings: ["Pencahayaan Sinematik", "Cahaya Lembut Alami", "Dramatis (Bayangan Kuat)", "Neon Glow", "Golden Hour", "Studio Lighting", "Rembrandt Lighting", "Cahaya Bulan", "Lampu Jalanan", "Cahaya Volumetrik", "Rim Lighting", CUSTOM_OPTION_VALUE],
@@ -541,6 +500,9 @@
                 showToast("Semua profil karakter berhasil dihapus!", "success");
             }
         }
+        
+        // Function generateImageWithAI is removed
+        // async function generateImageWithAI() { /* ... */ }
 
 
         function prepareDynamicStructure() {
@@ -550,12 +512,10 @@
             characterProfileSection.innerHTML = ''; 
             characterProfileSection.classList.add('hidden');
 
-            imageOutputSection.classList.add('hidden'); 
-            generatedImageContainer.innerHTML = '<p class="text-slate-500">Gambar yang dihasilkan akan muncul di sini.</p>';
+            // Ensure specific generation buttons are removed if they exist from other modes
             const oldImageGenBtn = document.getElementById('generate-image-btn');
             if (oldImageGenBtn) oldImageGenBtn.remove();
-            const oldDownloadBtn = document.getElementById('download-image-btn');
-            if (oldDownloadBtn) oldDownloadBtn.remove();
+            // No need to remove download button as it's tied to image generation which is removed
             
             let titleText = "Struktur Input Prompt"; 
              switch (mode) {
@@ -565,12 +525,11 @@
                 case 'narration': titleText = 'Detail Prompt Narasi:'; break;
             }
             dynamicStructureTitle.textContent = titleText;
-            dynamicStructureTitle.className = "text-xl font-semibold text-slate-700 mb-6"; 
 
             switch (mode) {
                 case 'image':
                     const charTitle = document.createElement('h4');
-                    charTitle.className = "text-lg font-medium text-slate-700 mb-3 border-b border-slate-300 pb-2";
+                    charTitle.className = "text-lg font-medium text-slate-700 dark:text-slate-300 mb-3 border-b border-slate-300 dark:border-slate-700 pb-2";
                     charTitle.textContent = "Definisi Karakter Konsisten (Opsional)";
                     dynamicPromptStructureContainer.appendChild(charTitle);
                     dynamicPromptStructureContainer.appendChild(createFormGroup("Nama Karakter:", createTextInput("char_name", "Misal: Elara, Kaelen")));
@@ -579,11 +538,11 @@
                     dynamicPromptStructureContainer.appendChild(createFormGroup("Isyarat Kepribadian/Pose:", createTextarea("char_personality", 2, "Misal: sering tersenyum misterius, pose percaya diri")));
                     
                     const separator = document.createElement('hr');
-                    separator.className = "my-6 border-slate-300";
+                    separator.className = "my-6 border-slate-300 dark:border-slate-700";
                     dynamicPromptStructureContainer.appendChild(separator);
 
                     const sceneTitle = document.createElement('h4');
-                    sceneTitle.className = "text-lg font-medium text-slate-700 mb-3 border-b border-slate-300 pb-2";
+                    sceneTitle.className = "text-lg font-medium text-slate-700 dark:text-slate-300 mb-3 border-b border-slate-300 dark:border-slate-700 pb-2";
                     sceneTitle.textContent = "Detail Adegan Gambar";
                     dynamicPromptStructureContainer.appendChild(sceneTitle);
 
@@ -597,14 +556,12 @@
                     dynamicPromptStructureContainer.appendChild(createCustomSelectGroup("Pencahayaan:", "img_lighting", imageOptions.lightings));
                     dynamicPromptStructureContainer.appendChild(createCustomSelectGroup("Skema Warna:", "img_colors", imageOptions.colors));
                     dynamicPromptStructureContainer.appendChild(createCustomSelectGroup("Komposisi/Sudut Pandang:", "img_composition", imageOptions.compositions));
-                    // Aspect ratio dropdown is REMOVED
                     dynamicPromptStructureContainer.appendChild(createFormGroup("Detail Tambahan/Modifier:", createTextarea("img_details", 2, "Contoh: Surealis, fantasi gelap")));
                     if (baseInput && document.getElementById('img_subject')) document.getElementById('img_subject').value = baseInput;
 
-                    // Add Character Profile Management UI
                     characterProfileSection.classList.remove('hidden');
                     const profileTitle = document.createElement('h4');
-                    profileTitle.className = "text-lg font-medium text-slate-700 mb-4";
+                    profileTitle.className = "text-lg font-medium text-slate-700 dark:text-slate-300 mb-4";
                     profileTitle.textContent = "Manajemen Profil Karakter";
                     characterProfileSection.appendChild(profileTitle);
 
@@ -651,15 +608,6 @@
                     deleteAllBtn.onclick = deleteAllCharacterProfiles;
                     profileActionButtonsDiv.appendChild(deleteAllBtn);
                     characterProfileSection.appendChild(profileActionButtonsDiv);
-
-
-                    const generateImageBtn = document.createElement('button');
-                    generateImageBtn.id = 'generate-image-btn';
-                    generateImageBtn.className = 'btn-image-gen font-semibold py-3.5 px-8 rounded-lg text-base order-2'; 
-                    generateImageBtn.innerHTML = '🖼️ Generate Gambar dengan AI';
-                    generateImageBtn.disabled = true; 
-                    generateImageBtn.addEventListener('click', generateImageWithAI);
-                    generateButtonsContainer.appendChild(generateImageBtn);
                     break;
                 case 'veo3': 
                     dynamicPromptStructureContainer.appendChild(createFormGroup("Deskripsi Adegan Lengkap:", createTextarea("veo_scene_desc", 4, "Contoh: Pengejaran mobil di kota malam hari yang hujan")));
@@ -737,7 +685,6 @@
                 showToast("API Key berhasil disimpan!", "success");
             } else {
                 apiKeyStatusMessage.textContent = "Masukkan API Key terlebih dahulu.";
-                // apiKeyStatusMessage.className = "text-xs text-red-600 mt-3"; // Class already set in HTML, just change text
                 showToast("API Key tidak boleh kosong.", "error");
             }
         }
@@ -838,7 +785,7 @@
             outputPromptId.value = "Sedang memproses teks prompt (Tahap 1: Peningkatan), mohon tunggu...";
             outputPromptEn.value = ""; 
             
-            const generateImageBtn = document.getElementById('generate-image-btn');
+            const generateImageBtn = document.getElementById('generate-image-btn'); // Still get ref, even if it might not exist
             if (generateImageBtn) generateImageBtn.disabled = true;
 
             let basePromptDetails = "";
@@ -876,7 +823,7 @@
                                       `Detail Tambahan/Modifier: ${getVal('img_details') || "Tidak ada"}` +
                                       characterBlock; 
 
-                    enhancerInstruction = `Anda adalah seorang "Advanced Prompt Engineer" dan "Creative Visual Storyteller" untuk generator gambar AI. Tugas Anda adalah mengambil detail prompt berikut dan MENGEMBANGKANNYA secara kreatif menjadi SATU prompt gambar tunggal yang sangat deskriptif, imajinatif, kaya visual, sinematik, dan memukau. ${characterBlock ? "PERHATIAN UTAMA: Pastikan **karakter yang konsisten** berdasarkan detail karakter yang diberikan (Nama, Fitur Visual, Pakaian Dominan, Kepribadian/Pose) muncul secara jelas, akurat, dan dominan dalam gambar. Ini adalah prioritas tertinggi. Setelah itu, integrasikan detail adegan tambahan secara harmonis di sekitar karakter tersebut." : "Jika tidak ada detail karakter spesifik, fokus pada elemen adegan."} Ikuti kaidah penulisan prompt yang baik: mulai dengan subjek utama, lalu detailnya, setting, gaya seni, pencahayaan, warna, komposisi, dan akhiri dengan modifier kualitas. Gunakan kata sifat dan keterangan yang kaya. Jika "Seniman/Pengaruh" adalah "Tidak ada", maka jangan sertakan pengaruh seniman apapun. Jika elemen lain "Tidak ditentukan secara spesifik", gunakan kreativitas Anda untuk mengisinya dengan pilihan yang memperkuat keseluruhan konsep visual. Output HANYA berupa prompt gambar final dalam satu paragraf/kalimat panjang yang koheren dan siap pakai, TANPA kalimat pembuka/penutup/penjelasan/label/daftar. Lukislah dengan kata-kata!`;
+                    enhancerInstruction = `Anda adalah seorang "Advanced Prompt Engineer" dan "Creative Visual Storyteller" untuk generator gambar AI. Tugas Anda adalah mengambil detail prompt berikut dan MENGEMBANGKANNYA secara kreatif menjadi SATU prompt gambar tunggal yang sangat deskriptif, imajinatif, kaya visual, sinematik, dan memukau. ${characterBlock ? "PERHATIAN UTAMA: Pastikan **karakter yang konsisten** berdasarkan detail karakter yang diberikan (Nama, Fitur Visual, Pakaian Dominan, Kepribadian/Pose) muncul secara jelas, akurat, dan dominan dalam gambar. Ini adalah prioritas tertinggi. Setelah itu, integrasikan detail adegan tambahan secara harmonis di sekitar karakter tersebut." : "Jika tidak ada detail karakter spesifik, fokus pada elemen adegan."} Susun prompt dengan struktur yang baik: mulai dengan subjek utama dan karakter, kemudian deskripsikan aksi atau pose, pakaian tambahan, setting/lokasi detail, waktu dan pencahayaan yang terkait, suasana yang kuat, gaya seni, pengaruh seniman (jika ada & bukan 'Tidak Ada/Kosongkan'), skema warna, komposisi, dan akhiri dengan modifier kualitas tinggi (misalnya 'sangat detail', 'resolusi 4K', 'cinematic lighting', 'epic', 'masterpiece', 'trending on artstation'). Elaborasi setiap elemen dengan kata sifat dan keterangan yang kaya. Jika elemen "Tidak ditentukan secara spesifik", gunakan kreativitas Anda. Output HANYA berupa prompt gambar final dalam satu paragraf/kalimat panjang yang koheren dan siap pakai, TANPA kalimat pembuka/penutup/penjelasan/label/daftar. Lukislah dengan kata-kata!`;
                     break;
                 case 'veo3': 
                     originalDialog = getVal('veo_dialogue'); 
@@ -887,7 +834,7 @@
                                       `Pergerakan Kamera: ${getVal('veo_camera_move', true) === "(Biarkan AI Memilih)" ? "AI yang memilih" : getVal('veo_camera_move', true)}\n` +
                                       `Musik/Suara Latar: ${getVal('veo_audio_bg', true)}\n` +
                                       `Durasi: ${getVal('veo_duration', true)}`;
-                    enhancerInstruction = `Anda adalah 'Prompt Enhancer' ahli untuk generator video AI. Tugas Anda adalah mengambil detail berikut (tanpa dialog, dialog akan ditambahkan kemudian) dan merakitnya menjadi SATU prompt deskripsi video tunggal yang komprehensif dan imajinatif. Fokus pada adegan, aksi, gaya visual, pergerakan kamera, musik/suara latar, dan durasi. Buatlah deskripsi yang mengalir dan menarik, siap untuk ditambahkan dialog jika ada. Output HANYA berupa deskripsi video dalam satu paragraf, TANPA penjelasan/daftar/label.`;
+                    enhancerInstruction = `Anda adalah 'Prompt Enhancer' ahli untuk generator video AI seperti Veo3. Tugas Anda adalah mengambil detail berikut (tanpa dialog, dialog akan ditambahkan kemudian) dan merakitnya menjadi SATU prompt deskripsi video tunggal yang komprehensif dan imajinatif. Fokus pada adegan, aksi, gaya visual, pergerakan kamera, musik/suara latar, dan durasi. Buatlah deskripsi yang mengalir dan menarik. Jika prompt yang Anda hasilkan menyiratkan adanya percakapan atau dialog antar karakter (misalnya, "dua orang terlihat sedang berdiskusi serius di meja bundar"), pastikan deskripsi tersebut memberikan konteks yang cukup agar dialog yang mungkin ditambahkan nanti terasa alami dan sesuai. Output HANYA berupa deskripsi video dalam satu paragraf, TANPA penjelasan/daftar/label.`;
                     break;
                 case 'scene':
                     basePromptDetails = `Detail Prompt Dasar untuk Adegan Video:\n` +
@@ -919,8 +866,19 @@
                 let enhancedIndonesianPrompt = await callGeminiAPI(fullApiPrompt);
                 
                 if (mode === 'veo3' && originalDialog) {
-                    const formattedDialog = "\n\n-- DIALOG (Bahasa Asli) --\n" + originalDialog.split('\n').map(d => d.trim()).filter(d => d).join("\n");
-                    enhancedIndonesianPrompt += formattedDialog;
+                    const dialogLines = originalDialog.split('\n').map(d => d.trim()).filter(d => d);
+                    let formattedDialogContent = "";
+                    if (dialogLines.length > 0) {
+                        const hasSpeakerTags = dialogLines.every(line => /^[a-zA-Z0-9\s]+:/.test(line.trim()));
+                        if (hasSpeakerTags) {
+                            formattedDialogContent = dialogLines.join("\n");
+                        } else {
+                            formattedDialogContent = dialogLines.join("\n"); 
+                        }
+                    }
+                    if (formattedDialogContent) {
+                        enhancedIndonesianPrompt += `\n\n-- DIALOG (Bahasa Asli) --\n${formattedDialogContent}`;
+                    }
                 }
                 outputPromptId.value = enhancedIndonesianPrompt;
 
@@ -931,16 +889,25 @@
                 outputPromptEn.value = "Sedang menerjemahkan teks prompt ke Bahasa Inggris...";
 
                 let textToTranslate = enhancedIndonesianPrompt;
+                let dialogToAppendInEnglish = "";
+
                 if (mode === 'veo3' && originalDialog) {
-                    textToTranslate = enhancedIndonesianPrompt.substring(0, enhancedIndonesianPrompt.indexOf("\n\n-- DIALOG (Bahasa Asli) --"));
+                    const dialogMarker = "\n\n-- DIALOG (Bahasa Asli) --";
+                    const dialogIndex = enhancedIndonesianPrompt.indexOf(dialogMarker);
+                    if (dialogIndex !== -1) {
+                       textToTranslate = enhancedIndonesianPrompt.substring(0, dialogIndex);
+                       const dialogLines = originalDialog.split('\n').map(d => d.trim()).filter(d => d);
+                       if (dialogLines.length > 0) {
+                            dialogToAppendInEnglish = "\n\n-- DIALOG (Original Indonesian) --\n" + dialogLines.join("\n");
+                       }
+                    }
                 }
 
                 const translationPrompt = `Terjemahkan teks berikut ke dalam Bahasa Inggris secara akurat dan natural, pertahankan semua detail, format (jika ada seperti format skenario), dan maksud aslinya. Jangan menambahkan komentar atau frasa pembuka/penutup di luar terjemahan itu sendiri:\n\n"${textToTranslate}"`;
                 let enhancedEnglishPrompt = await callGeminiAPI(translationPrompt);
 
-                if (mode === 'veo3' && originalDialog) {
-                    const formattedDialog = "\n\n-- DIALOG (Original Indonesian) --\n" + originalDialog.split('\n').map(d => d.trim()).filter(d => d).join("\n");
-                    enhancedEnglishPrompt += formattedDialog;
+                if (mode === 'veo3' && dialogToAppendInEnglish) {
+                    enhancedEnglishPrompt += dialogToAppendInEnglish;
                 }
                 outputPromptEn.value = enhancedEnglishPrompt;
 
@@ -956,120 +923,15 @@
             }
         }
 
-        async function generateImageWithAI() { /* ... (Sama seperti v15) ... */ }
-        
-        // Re-implementasi generateImageWithAI
-        async function generateImageWithAI() {
-            const imageGenBtn = document.getElementById('generate-image-btn');
-            if (!imageGenBtn) return;
-
-            const textPromptForImage = outputPromptId.value;
-            if (!textPromptForImage || textPromptForImage.includes("Sedang memproses") || textPromptForImage.includes("Gagal meningkatkan")) {
-                showToast("Harap hasilkan dan tingkatkan teks prompt terlebih dahulu.", "info");
-                return;
-            }
-            
-            let currentApiKey = getStoredApiKey();
-            if (!currentApiKey) {
-                 const canvasInjectedKey = ""; 
-                 currentApiKey = canvasInjectedKey;
-                 if (!currentApiKey) {
-                    showToast("API Key tidak ditemukan untuk generasi gambar. Harap masukkan API Key Anda.", "error");
-                    imageGenBtn.disabled = false;
-                    imageGenBtn.innerHTML = "🖼️ Generate Gambar dengan AI";
-                    return;
-                 }
-            }
-
-
-            imageGenBtn.disabled = true;
-            imageGenBtn.innerHTML = `<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Proses Gambar AI...`;
-            
-            imageOutputSection.classList.remove('hidden');
-            generatedImageContainer.innerHTML = '<div class="loader"></div> <p class="ml-4 text-slate-600">Sedang membuat gambar...</p>';
-            
-            const oldDownloadBtn = document.getElementById('download-image-btn');
-            if (oldDownloadBtn) oldDownloadBtn.remove();
-
-            const payload = { instances: [{ prompt: textPromptForImage }], parameters: { "sampleCount": 1 } };
-            // API Key for Imagen is now taken from getStoredApiKey() or fallback
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${currentApiKey}`;
-
-            try {
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                if (!response.ok) {
-                    let errorText = `Imagen API request failed status ${response.status}: ${response.statusText}`;
-                     if (response.status === 401 || response.status === 403) {
-                        errorText = "Gagal membuat gambar: Masalah otentikasi atau izin dengan API Gambar (" + response.status + "). Pastikan API Key Anda valid dan memiliki izin yang benar.";
-                    } else {
-                        try {
-                            const errorData = await response.json();
-                            console.error("Imagen API Error Data (JSON):", errorData);
-                            errorText = `Imagen API request failed status ${response.status}: ${errorData.error?.message || JSON.stringify(errorData)}`;
-                        } catch (e) {
-                            try {
-                               const textError = await response.text();
-                               console.error("Imagen API Error Data (Text):", textError);
-                               errorText = `Imagen API request failed status ${response.status}: ${textError || response.statusText}`;
-                            } catch (e2) {
-                                 console.error("Could not get error response body from Imagen API:", e2);
-                            }
-                        }
-                    }
-                    throw new Error(errorText);
-                }
-                const result = await response.json();
-
-                if (result.predictions && result.predictions.length > 0 && result.predictions[0].bytesBase64Encoded) {
-                    const imageUrl = `data:image/png;base64,${result.predictions[0].bytesBase64Encoded}`;
-                    generatedImageContainer.innerHTML = `<img src="${imageUrl}" alt="Generated AI Image">`;
-                    
-                    const downloadBtn = document.createElement('button');
-                    downloadBtn.id = 'download-image-btn';
-                    downloadBtn.className = 'btn-download font-semibold py-2 px-5 rounded-lg text-sm mt-4';
-                    downloadBtn.innerHTML = '💾 Unduh Gambar';
-                    downloadBtn.onclick = () => {
-                        const link = document.createElement('a');
-                        link.href = imageUrl;
-                        link.download = `ai_generated_image_${Date.now()}.png`;
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                        showToast("Gambar mulai diunduh!", "success");
-                    };
-                    generatedImageContainer.appendChild(downloadBtn);
-
-                    showToast("Gambar berhasil dibuat oleh AI!", "success");
-                } else {
-                    console.error("Unexpected Imagen API response structure:", result);
-                    generatedImageContainer.innerHTML = '<p class="text-red-600">Gagal mendapatkan data gambar dari AI. Struktur respons tidak sesuai.</p>';
-                    showToast("Gagal memproses respons gambar AI.", "error");
-                }
-            } catch (error) {
-                console.error('Error calling Imagen API:', error);
-                generatedImageContainer.innerHTML = `<p class="text-red-600">${error.message}</p>`;
-                showToast(`Error Gambar AI: ${error.message}`, "error");
-            } finally {
-                imageGenBtn.disabled = false;
-                imageGenBtn.innerHTML = "🖼️ Generate Gambar dengan AI";
-            }
-        }
-
-
         // --- Event Listeners ---
         modeRadios.forEach(radio => {
             radio.addEventListener('change', () => {
                 prepareDynamicStructure();
                 outputPromptId.value = ""; 
                 outputPromptEn.value = ""; 
-                imageOutputSection.classList.add('hidden');
-                generatedImageContainer.innerHTML = '<p class="text-slate-500">Gambar yang dihasilkan akan muncul di sini.</p>';
-                const imgGenBtn = document.getElementById('generate-image-btn');
+                // imageOutputSection.classList.add('hidden'); // Section removed
+                // generatedImageContainer.innerHTML = '<p class="text-slate-500">Gambar yang dihasilkan akan muncul di sini.</p>'; // Container removed
+                const imgGenBtn = document.getElementById('generate-image-btn'); // Button might be removed
                 if (imgGenBtn) imgGenBtn.disabled = true;
             });
         });
