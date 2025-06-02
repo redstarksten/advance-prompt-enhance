@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prompt Generator & Enhancer - Update UI API Key</title>
+    <title>Prompt Generator & Enhancer - Karakter Konsisten & Profil</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -325,12 +325,12 @@
         const toastNotification = document.getElementById('toast-notification');
         const CUSTOM_OPTION_VALUE = "Isi Sendiri...";
         const CHARACTER_PROFILES_KEY = 'characterPromptProfiles';
-        const USER_API_KEY_LS_KEY = 'userGeminiApiKey';
+        const USER_API_KEY_LS_KEY = 'userGeminiApiKey'; 
 
         const userApiKeyInput = document.getElementById('user-api-key');
         const saveApiKeyBtn = document.getElementById('save-api-key-btn');
         const clearApiKeyBtn = document.getElementById('clear-api-key-btn');
-        const changeApiKeyBtn = document.getElementById('change-api-key-btn'); // New button
+        const changeApiKeyBtn = document.getElementById('change-api-key-btn'); 
         const apiKeyStatusMessage = document.getElementById('api-key-status-message');
         const apiKeyInputContainer = document.getElementById('api-key-input-container');
         const apiKeyDisplayContainer = document.getElementById('api-key-display-container');
@@ -380,7 +380,7 @@
         }
         function createTextInput(id, placeholder = "", className = "input-field") {
             const input = document.createElement('input');
-            input.type = 'text'; // Default to text, change for API key input
+            input.type = 'text'; 
             if (id === 'user-api-key') input.type = 'password';
             input.id = id;
             input.name = id;
@@ -737,7 +737,7 @@
                 showToast("API Key berhasil disimpan!", "success");
             } else {
                 apiKeyStatusMessage.textContent = "Masukkan API Key terlebih dahulu.";
-                apiKeyStatusMessage.className = "text-xs text-red-600 mt-3";
+                // apiKeyStatusMessage.className = "text-xs text-red-600 mt-3"; // Class already set in HTML, just change text
                 showToast("API Key tidak boleh kosong.", "error");
             }
         }
@@ -753,16 +753,16 @@
         function handleChangeApiKey() {
             const storedKey = getStoredApiKey();
             if (storedKey) {
-                userApiKeyInput.value = storedKey; // Pre-fill for editing, though it's password type
+                userApiKeyInput.value = storedKey; 
             }
-            updateApiKeyUI(false); // Show input field
+            updateApiKeyUI(false); 
             apiKeyStatusMessage.textContent = "Masukkan API Key baru atau edit yang sudah ada, lalu simpan.";
         }
 
         function loadUserApiKey() {
             const storedKey = getStoredApiKey();
             if (storedKey) {
-                userApiKeyInput.value = storedKey; // Keep it in input but hidden initially by UI logic
+                userApiKeyInput.value = storedKey; 
                 updateApiKeyUI(true);
             } else {
                 updateApiKeyUI(false);
@@ -828,7 +828,7 @@
         async function generateAndEnhancePrompt() { 
             const mode = document.querySelector('input[name="mode"]:checked').value;
             
-            if (!getStoredApiKey() && "") { // Check if user API key is set, else rely on Canvas (empty string for now)
+            if (!getStoredApiKey() && "") { 
                  showToast("Harap simpan API Key Anda terlebih dahulu di bagian Pengaturan API Key.", "error");
                  return;
             }
@@ -876,7 +876,7 @@
                                       `Detail Tambahan/Modifier: ${getVal('img_details') || "Tidak ada"}` +
                                       characterBlock; 
 
-                    enhancerInstruction = `Anda adalah seorang "Advanced Prompt Engineer" dan "Creative Visual Storyteller" untuk generator gambar AI. Tugas Anda adalah mengambil detail prompt berikut dan MENGEMBANGKANNYA secara kreatif menjadi SATU prompt gambar tunggal yang sangat deskriptif, imajinatif, kaya visual, sinematik, dan memukau. ${characterBlock ? "PERHATIAN UTAMA: Pastikan **karakter yang konsisten** berdasarkan detail karakter yang diberikan (Nama, Fitur Visual, Pakaian Dominan, Kepribadian/Pose) muncul secara jelas, akurat, dan dominan dalam gambar. Ini adalah prioritas tertinggi. Setelah itu, integrasikan detail adegan tambahan secara harmonis di sekitar karakter tersebut." : "Jika tidak ada detail karakter spesifik, fokus pada elemen adegan."} Jangan hanya menggabungkan kata kunci; elaborasi setiap aspek. Tambahkan detail tekstur, material, pola, interaksi antar elemen, dan "wow factor" seperti efek partikel, kedalaman bidang, atau perspektif unik. Deskripsikan bagaimana pencahayaan mempengaruhi warna dan suasana. Jika "Seniman/Pengaruh" adalah "Tidak ada", maka jangan sertakan pengaruh seniman apapun. Jika elemen lain "Tidak ditentukan secara spesifik", gunakan kreativitas Anda untuk mengisinya dengan pilihan yang memperkuat keseluruhan konsep visual. Output HANYA berupa prompt gambar final dalam satu paragraf/kalimat panjang yang koheren dan siap pakai, TANPA kalimat pembuka/penutup/penjelasan/label/daftar. Lukislah dengan kata-kata!`;
+                    enhancerInstruction = `Anda adalah seorang "Advanced Prompt Engineer" dan "Creative Visual Storyteller" untuk generator gambar AI. Tugas Anda adalah mengambil detail prompt berikut dan MENGEMBANGKANNYA secara kreatif menjadi SATU prompt gambar tunggal yang sangat deskriptif, imajinatif, kaya visual, sinematik, dan memukau. ${characterBlock ? "PERHATIAN UTAMA: Pastikan **karakter yang konsisten** berdasarkan detail karakter yang diberikan (Nama, Fitur Visual, Pakaian Dominan, Kepribadian/Pose) muncul secara jelas, akurat, dan dominan dalam gambar. Ini adalah prioritas tertinggi. Setelah itu, integrasikan detail adegan tambahan secara harmonis di sekitar karakter tersebut." : "Jika tidak ada detail karakter spesifik, fokus pada elemen adegan."} Ikuti kaidah penulisan prompt yang baik: mulai dengan subjek utama, lalu detailnya, setting, gaya seni, pencahayaan, warna, komposisi, dan akhiri dengan modifier kualitas. Gunakan kata sifat dan keterangan yang kaya. Jika "Seniman/Pengaruh" adalah "Tidak ada", maka jangan sertakan pengaruh seniman apapun. Jika elemen lain "Tidak ditentukan secara spesifik", gunakan kreativitas Anda untuk mengisinya dengan pilihan yang memperkuat keseluruhan konsep visual. Output HANYA berupa prompt gambar final dalam satu paragraf/kalimat panjang yang koheren dan siap pakai, TANPA kalimat pembuka/penutup/penjelasan/label/daftar. Lukislah dengan kata-kata!`;
                     break;
                 case 'veo3': 
                     originalDialog = getVal('veo_dialogue'); 
@@ -1089,7 +1089,7 @@
 
         saveApiKeyBtn.addEventListener('click', saveUserApiKey);
         clearApiKeyBtn.addEventListener('click', clearUserApiKey);
-        changeApiKeyBtn.addEventListener('click', handleChangeApiKey); // Event listener for new button
+        changeApiKeyBtn.addEventListener('click', handleChangeApiKey); 
 
 
         function setupCopyButton(buttonId, textareaId, langName) { /* ... (Sama seperti v12) ... */ }
