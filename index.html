@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prompt Generator & Enhancer - API Key Pengguna</title>
+    <title>Prompt Generator & Enhancer - Update UI API Key</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -104,6 +104,8 @@
         .btn-get-api:hover { background-color: #4f46e5; /* indigo-600 */ }
         .btn-save-api { background-color: #10b981; /* emerald-500 */ }
         .btn-save-api:hover { background-color: #059669; /* emerald-600 */ }
+        .btn-change-api { background-color: #f59e0b; /* amber-500 */ }
+        .btn-change-api:hover { background-color: #d97706; /* amber-600 */ }
 
 
         .toast {
@@ -125,13 +127,13 @@
         }
         .input-group { margin-bottom: 1.5rem; }
         .input-group label { display: block; margin-bottom: 0.625rem; font-weight: 500; color: #475569; font-size: 0.95rem; }
-        .input-field, .input-group input[type="text"], .input-group textarea, .input-group select {
+        .input-field, .input-group input[type="text"], .input-group input[type="password"], .input-group textarea, .input-group select {
             width: 100%; padding: 0.875rem 1.125rem; border: 1px solid #cbd5e1; 
             border-radius: 0.5rem; background-color: white; color: #334155; 
             transition: box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out; font-size: 0.95rem;
         }
-        .input-field::placeholder, .input-group input[type="text"]::placeholder, .input-group textarea::placeholder { color: #94a3b8; }
-        .input-field:focus, .input-group input[type="text"]:focus, .input-group textarea:focus, .input-group select:focus {
+        .input-field::placeholder, .input-group input[type="text"]::placeholder, .input-group input[type="password"]::placeholder, .input-group textarea::placeholder { color: #94a3b8; }
+        .input-field:focus, .input-group input[type="text"]:focus, .input-group input[type="password"]:focus, .input-group textarea:focus, .input-group select:focus {
             outline: none; border-color: #4f46e5; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15); 
         }
         .custom-input-container { display: flex; gap: 0.75rem; align-items: center; }
@@ -199,16 +201,20 @@
 
         <section class="api-key-section">
             <h2 class="text-xl font-semibold text-sky-800 mb-4">Pengaturan API Key Gemini Anda</h2>
-            <div class="input-group">
-                <label for="user-api-key" class="text-sky-700">Masukkan API Key Anda:</label>
-                <input type="password" id="user-api-key" class="input-field" placeholder="AIzaSy...">
+            <div id="api-key-input-container">
+                <div class="input-group">
+                    <label for="user-api-key" class="text-sky-700">Masukkan API Key Anda:</label>
+                    <input type="password" id="user-api-key" class="input-field" placeholder="AIzaSy...">
+                </div>
+                <button id="save-api-key-btn" class="btn-api btn-save-api mr-2">Simpan API Key</button>
             </div>
-            <div class="flex flex-wrap gap-3 items-center">
-                <button id="save-api-key-btn" class="btn-api btn-save-api">Simpan API Key</button>
-                <a href="https://aistudio.google.com/app/apikey?hl=id" target="_blank" rel="noopener noreferrer" id="get-api-key-btn" class="btn-api btn-get-api">Dapatkan API Key</a>
-                <button id="clear-api-key-btn" class="btn-api btn-profile-delete text-xs">Hapus API Key Tersimpan</button>
+            <div id="api-key-display-container" class="hidden">
+                 <p id="api-key-status-display" class="text-green-600 font-medium mb-2"></p>
+                 <button id="change-api-key-btn" class="btn-api btn-change-api mr-2">Ganti API Key</button>
             </div>
-            <p id="api-key-status" class="text-xs text-sky-600 mt-2"></p>
+            <a href="https://aistudio.google.com/app/apikey?hl=id" target="_blank" rel="noopener noreferrer" id="get-api-key-btn" class="btn-api btn-get-api mr-2">Dapatkan API Key</a>
+            <button id="clear-api-key-btn" class="btn-api btn-profile-delete text-xs">Hapus API Key Tersimpan</button>
+            <p id="api-key-status-message" class="text-xs text-sky-600 mt-3"></p>
         </section>
 
 
@@ -319,12 +325,17 @@
         const toastNotification = document.getElementById('toast-notification');
         const CUSTOM_OPTION_VALUE = "Isi Sendiri...";
         const CHARACTER_PROFILES_KEY = 'characterPromptProfiles';
-        const USER_API_KEY_LS_KEY = 'userGeminiApiKey'; // localStorage key for API key
+        const USER_API_KEY_LS_KEY = 'userGeminiApiKey';
 
         const userApiKeyInput = document.getElementById('user-api-key');
         const saveApiKeyBtn = document.getElementById('save-api-key-btn');
         const clearApiKeyBtn = document.getElementById('clear-api-key-btn');
-        const apiKeyStatus = document.getElementById('api-key-status');
+        const changeApiKeyBtn = document.getElementById('change-api-key-btn'); // New button
+        const apiKeyStatusMessage = document.getElementById('api-key-status-message');
+        const apiKeyInputContainer = document.getElementById('api-key-input-container');
+        const apiKeyDisplayContainer = document.getElementById('api-key-display-container');
+        const apiKeyStatusDisplay = document.getElementById('api-key-status-display');
+
 
         // --- Opsi untuk Dropdown (Sama seperti v16) ---
         const imageOptions = {
@@ -369,7 +380,8 @@
         }
         function createTextInput(id, placeholder = "", className = "input-field") {
             const input = document.createElement('input');
-            input.type = 'text';
+            input.type = 'text'; // Default to text, change for API key input
+            if (id === 'user-api-key') input.type = 'password';
             input.id = id;
             input.name = id;
             input.placeholder = placeholder;
@@ -703,16 +715,29 @@
             return localStorage.getItem(USER_API_KEY_LS_KEY);
         }
 
+        function updateApiKeyUI(isKeyStored) {
+            if (isKeyStored) {
+                apiKeyInputContainer.classList.add('hidden');
+                apiKeyDisplayContainer.classList.remove('hidden');
+                apiKeyStatusDisplay.textContent = "API Key tersimpan. Aplikasi siap digunakan!";
+                apiKeyStatusMessage.textContent = "Anda dapat mengganti atau menghapus API Key di bawah.";
+            } else {
+                apiKeyInputContainer.classList.remove('hidden');
+                apiKeyDisplayContainer.classList.add('hidden');
+                apiKeyStatusMessage.textContent = "Tidak ada API Key tersimpan. Silakan masukkan API Key Anda.";
+            }
+        }
+
+
         function saveUserApiKey() {
             const key = userApiKeyInput.value.trim();
             if (key) {
                 localStorage.setItem(USER_API_KEY_LS_KEY, key);
-                apiKeyStatus.textContent = "API Key disimpan!";
-                apiKeyStatus.className = "text-xs text-green-600 mt-2";
+                updateApiKeyUI(true);
                 showToast("API Key berhasil disimpan!", "success");
             } else {
-                apiKeyStatus.textContent = "Masukkan API Key terlebih dahulu.";
-                apiKeyStatus.className = "text-xs text-red-600 mt-2";
+                apiKeyStatusMessage.textContent = "Masukkan API Key terlebih dahulu.";
+                apiKeyStatusMessage.className = "text-xs text-red-600 mt-3";
                 showToast("API Key tidak boleh kosong.", "error");
             }
         }
@@ -720,21 +745,27 @@
             if (confirm("Apakah Anda yakin ingin menghapus API Key yang tersimpan?")) {
                 localStorage.removeItem(USER_API_KEY_LS_KEY);
                 userApiKeyInput.value = "";
-                apiKeyStatus.textContent = "API Key telah dihapus.";
-                apiKeyStatus.className = "text-xs text-slate-600 mt-2";
+                updateApiKeyUI(false);
                 showToast("API Key berhasil dihapus.", "info");
             }
         }
         
+        function handleChangeApiKey() {
+            const storedKey = getStoredApiKey();
+            if (storedKey) {
+                userApiKeyInput.value = storedKey; // Pre-fill for editing, though it's password type
+            }
+            updateApiKeyUI(false); // Show input field
+            apiKeyStatusMessage.textContent = "Masukkan API Key baru atau edit yang sudah ada, lalu simpan.";
+        }
+
         function loadUserApiKey() {
             const storedKey = getStoredApiKey();
             if (storedKey) {
-                userApiKeyInput.value = storedKey;
-                apiKeyStatus.textContent = "API Key berhasil dimuat dari penyimpanan.";
-                apiKeyStatus.className = "text-xs text-green-600 mt-2";
+                userApiKeyInput.value = storedKey; // Keep it in input but hidden initially by UI logic
+                updateApiKeyUI(true);
             } else {
-                apiKeyStatus.textContent = "Tidak ada API Key tersimpan. Silakan masukkan.";
-                apiKeyStatus.className = "text-xs text-slate-600 mt-2";
+                updateApiKeyUI(false);
             }
         }
 
@@ -742,16 +773,12 @@
         async function callGeminiAPI(promptText, model = "gemini-2.0-flash") {
             let currentApiKey = getStoredApiKey();
             if (!currentApiKey) {
-                // Fallback to Canvas-injected key if user hasn't provided one
-                // However, for user-facing app, it's better to enforce user key
-                // For now, let's assume Canvas might inject one if user's is missing
-                // but ideally, we'd block the call if no key is available.
-                const canvasInjectedKey = ""; // This would be the __api_key__ or similar if provided by Canvas
-                currentApiKey = canvasInjectedKey; 
-                if (!currentApiKey) {
-                     showToast("API Key tidak ditemukan. Harap masukkan API Key Anda.", "error");
+                 const canvasInjectedKey = ""; 
+                 currentApiKey = canvasInjectedKey; 
+                 if (!currentApiKey) {
+                     showToast("API Key tidak ditemukan. Harap masukkan API Key Anda di bagian Pengaturan.", "error");
                      throw new Error("API Key tidak ditemukan. Harap masukkan API Key Anda di bagian Pengaturan API Key.");
-                }
+                 }
             }
             
             const modelPath = model.includes(":") ? model : `models/${model}`;
@@ -768,7 +795,7 @@
 
             if (!response.ok) {
                 let errorText = `API request to ${modelPath} failed status ${response.status}: ${response.statusText}`;
-                if (response.status === 401 || response.status === 403) { // Handle 401 Unauthorized and 403 Forbidden
+                if (response.status === 401 || response.status === 403) { 
                     errorText = `Gagal menghubungi API ${modelPath} (Status ${response.status}): Masalah otentikasi atau izin. Pastikan API Key Anda valid dan memiliki izin yang benar.`;
                 } else {
                     try {
@@ -801,6 +828,11 @@
         async function generateAndEnhancePrompt() { 
             const mode = document.querySelector('input[name="mode"]:checked').value;
             
+            if (!getStoredApiKey() && "") { // Check if user API key is set, else rely on Canvas (empty string for now)
+                 showToast("Harap simpan API Key Anda terlebih dahulu di bagian Pengaturan API Key.", "error");
+                 return;
+            }
+
             generateEnhanceBtn.disabled = true;
             generateEnhanceBtn.innerHTML = `<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Proses AI Teks (1/2)...`;
             outputPromptId.value = "Sedang memproses teks prompt (Tahap 1: Peningkatan), mohon tunggu...";
@@ -924,6 +956,9 @@
             }
         }
 
+        async function generateImageWithAI() { /* ... (Sama seperti v15) ... */ }
+        
+        // Re-implementasi generateImageWithAI
         async function generateImageWithAI() {
             const imageGenBtn = document.getElementById('generate-image-btn');
             if (!imageGenBtn) return;
@@ -1054,6 +1089,7 @@
 
         saveApiKeyBtn.addEventListener('click', saveUserApiKey);
         clearApiKeyBtn.addEventListener('click', clearUserApiKey);
+        changeApiKeyBtn.addEventListener('click', handleChangeApiKey); // Event listener for new button
 
 
         function setupCopyButton(buttonId, textareaId, langName) { /* ... (Sama seperti v12) ... */ }
@@ -1100,7 +1136,7 @@
         }
 
         // Inisialisasi awal
-        loadUserApiKey(); // Load API key on start
+        loadUserApiKey(); 
         prepareDynamicStructure();
         if (document.querySelector('input[name="mode"]:checked').value === 'image') {
             setTimeout(() => {
