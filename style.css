@@ -182,48 +182,49 @@ body {
             margin-bottom: 2rem;
         }
 
-/* Dark Mode Styles */
+/* Enhanced Dark Mode Styles */
 
 body.dark {
-    background-color: #0f172a;
-    color: #f1f5f9;
+    background-color: #121212; /* rich black */
+    color: #ffffff; /* bright white */
 }
 .dark .main-container {
-    background-color: #1e293b;
-    color: #f1f5f9;
+    background-color: #1e1e2f; /* subtle dark with tint */
+    color: #ffffff;
 }
 .dark .input-field,
 .dark .input-group input[type="text"],
 .dark .input-group input[type="password"],
 .dark .input-group textarea,
 .dark .input-group select {
-    background-color: #334155;
-    color: #f1f5f9;
-    border-color: #475569;
+    background-color: #2a2a3c;
+    color: #ffffff;
+    border-color: #3b3b5c;
 }
 .dark .input-field::placeholder {
-    color: #94a3b8;
+    color: #b0b3c5;
 }
 .dark .btn-secondary {
-    background-color: #475569;
+    background-color: #3b3b5c;
     color: white;
-    border-color: #64748b;
+    border-color: #4a4a6a;
 }
 .dark .btn-secondary:hover {
-    background-color: #64748b;
-    border-color: #94a3b8;
+    background-color: #4a4a6a;
+    border-color: #5a5a7a;
 }
 .dark .btn-primary {
-    background-color: #1e293b;
+    background-color: #29293f;
+    color: white;
 }
 .dark .mode-card {
-    background-color: #334155;
-    color: #f1f5f9;
+    background-color: #2a2a3c;
+    color: #ffffff;
 }
 .dark .mode-card:hover {
-    border-color: #cbd5e1;
+    border-color: #c0c4d0;
 }
 .dark .toast {
-    background-color: #1e293b;
-    color: #f1f5f9;
+    background-color: #1e1e2f;
+    color: #ffffff;
 }
