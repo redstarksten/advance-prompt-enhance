@@ -181,3 +181,49 @@ body {
             border-radius: 0.5rem;
             margin-bottom: 2rem;
         }
+
+/* Dark Mode Styles */
+
+body.dark {
+    background-color: #0f172a;
+    color: #f1f5f9;
+}
+.dark .main-container {
+    background-color: #1e293b;
+    color: #f1f5f9;
+}
+.dark .input-field,
+.dark .input-group input[type="text"],
+.dark .input-group input[type="password"],
+.dark .input-group textarea,
+.dark .input-group select {
+    background-color: #334155;
+    color: #f1f5f9;
+    border-color: #475569;
+}
+.dark .input-field::placeholder {
+    color: #94a3b8;
+}
+.dark .btn-secondary {
+    background-color: #475569;
+    color: white;
+    border-color: #64748b;
+}
+.dark .btn-secondary:hover {
+    background-color: #64748b;
+    border-color: #94a3b8;
+}
+.dark .btn-primary {
+    background-color: #1e293b;
+}
+.dark .mode-card {
+    background-color: #334155;
+    color: #f1f5f9;
+}
+.dark .mode-card:hover {
+    border-color: #cbd5e1;
+}
+.dark .toast {
+    background-color: #1e293b;
+    color: #f1f5f9;
+}
