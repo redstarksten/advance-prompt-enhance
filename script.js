@@ -516,7 +516,7 @@ const modeRadios = document.querySelectorAll('input[name="mode"]');
                 apiKeyInputContainer.classList.add('hidden');
                 apiKeyDisplayContainer.classList.remove('hidden');
                 apiKeyStatusDisplay.textContent = "API Key tersimpan. Aplikasi siap digunakan!";
-                apiKeyStatusMessage.innerHTML = "<span class='text-white dark:text-slate-800'>Anda dapat mengganti atau menghapus API Key di bawah.</span>";
+                apiKeyStatusMessage.textContent = "Anda dapat mengganti atau menghapus API Key di bawah.";
             } else {
                 apiKeyInputContainer.classList.remove('hidden');
                 apiKeyDisplayContainer.classList.add('hidden');
@@ -870,21 +870,5 @@ const modeRadios = document.querySelectorAll('input[name="mode"]');
 
 // Dark Mode Toggle Script
 
-document.addEventListener("DOMContentLoaded", () => {
-    const toggle = document.getElementById("dark-mode-toggle");
-    const body = document.body;
-    const storedTheme = localStorage.getItem("theme");
-    if (storedTheme === "dark") {
-        body.classList.add("dark");
-        toggle.checked = true;
-    }
-    toggle.addEventListener("change", () => {
-        if (toggle.checked) {
-            body.classList.add("dark");
-            localStorage.setItem("theme", "dark");
-        } else {
-            body.classList.remove("dark");
-            localStorage.setItem("theme", "light");
-        }
-    });
+
 });
