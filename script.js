@@ -870,5 +870,21 @@ const modeRadios = document.querySelectorAll('input[name="mode"]');
 
 // Dark Mode Toggle Script
 
-
+document.addEventListener("DOMContentLoaded", () => {
+    const toggle = document.getElementById("dark-mode-toggle");
+    const body = document.body;
+    const storedTheme = localStorage.getItem("theme");
+    if (storedTheme === "dark") {
+        body.classList.add("dark");
+        toggle.checked = true;
+    }
+    toggle.addEventListener("change", () => {
+        if (toggle.checked) {
+            body.classList.add("dark");
+            localStorage.setItem("theme", "dark");
+        } else {
+            body.classList.remove("dark");
+            localStorage.setItem("theme", "light");
+        }
+    });
 });
