@@ -516,7 +516,7 @@ const modeRadios = document.querySelectorAll('input[name="mode"]');
                 apiKeyInputContainer.classList.add('hidden');
                 apiKeyDisplayContainer.classList.remove('hidden');
                 apiKeyStatusDisplay.textContent = "API Key tersimpan. Aplikasi siap digunakan!";
-                apiKeyStatusMessage.textContent = "Anda dapat mengganti atau menghapus API Key di bawah.";
+                apiKeyStatusMessage.innerHTML = "<span class='text-white dark:text-slate-800'>Anda dapat mengganti atau menghapus API Key di bawah.</span>";
             } else {
                 apiKeyInputContainer.classList.remove('hidden');
                 apiKeyDisplayContainer.classList.add('hidden');
