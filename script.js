@@ -1,20 +1,3 @@
-
-// --- Role prompt mapping untuk tiap mode ---
-const rolePrompts = {
-    karakter: "Kamu adalah kreator karakter fiksi. Deskripsikan karakter secara detail dari segi fisik, kepribadian, dan gaya bicara.",
-    cinematic: "Kamu adalah penulis naskah film. Buat narasi sinematik yang menyentuh emosi, seperti adegan dalam film.",
-    lirik: "Kamu adalah penulis lagu rap. Buat lirik yang penuh emosi, puitis, dan berima.",
-    copywriting: "Kamu adalah copywriter profesional. Buat teks persuasif dan ringkas untuk menarik perhatian target audiens.",
-    gambar: "Kamu adalah desainer visual. Buat deskripsi gambar yang padat, eksplisit, dan siap pakai di AI image generator."
-};
-
-// Gabungkan role prompt dengan input pengguna
-function generatePromptWithRole(userText, selectedMode) {
-    const rolePrompt = rolePrompts[selectedMode] || "";
-    return rolePrompt + "\n\n" + userText;
-}
-
-
 const modeRadios = document.querySelectorAll('input[name="mode"]');
         const userInput = document.getElementById('user-input');
         const dynamicPromptStructureContainer = document.getElementById('dynamic-prompt-structure');
@@ -884,3 +867,42 @@ const modeRadios = document.querySelectorAll('input[name="mode"]');
                  }
             }, 100);
         }
+
+// Dark Mode Toggle Script
+
+document.addEventListener("DOMContentLoaded", () => {
+    const toggle = document.getElementById("dark-mode-toggle");
+    const body = document.body;
+    const storedTheme = localStorage.getItem("theme");
+    if (storedTheme === "dark") {
+        body.classList.add("dark");
+        toggle.checked = true;
+    }
+    toggle.addEventListener("change", () => {
+        if (toggle.checked) {
+            body.classList.add("dark");
+            localStorage.setItem("theme", "dark");
+        } else {
+            body.classList.remove("dark");
+            localStorage.setItem("theme", "light");
+        }
+    });
+});
+
+
+// Template Prompt untuk mode: text_to_video
+const textToVideoTemplate = `A cinematic, hyper-realistic 8-second video set in [LOKASI dan SETTING VISUAL], styled like a [GAYA SETTING/FANTASY].
+
+A [KARAKTER UTAMA] (sekitar [USIA]), tampil dengan gaya [DESKRIPSI PAKAIAN, AKSESORIS, PENAMPILAN]. Ia berdiri [POSISI / GESTURE UNIK], sambil memegang [BENDA / OBJEK UNIK] bertuliskan "[LABEL UNIK]".
+
+Karakter berpose seperti [PERBANDINGAN DRAMATIS/IKONIK], lalu [TINDAKAN UTAMA yang LUCU / EPIK].
+
+**Ia berbicara dalam Bahasa Indonesia logat [LOGAT]**, penuh [EMOSI / KEANEHAN / ENERGI]:
+
+> "[DIALOG ASLI]"
+
+Setelah itu, karakter mencoba [AKSI KONYOL], namun gagal dan [KEJADIAN KONYOL / SLAPSTICK] — gaya [REFERENSI POP / FILM / PARODI].
+
+**Style**: [SINEMATOGRAFI], [GENRE HUMOR / FANTASY], [WAKTU HARI], [GAYA ANIMASI / PERSPEKTIF]  
+**Language**: Spoken in [BAHASA & AKSEN], no subtitles  
+**Duration**: [Durasi, misalnya 8 seconds]`;
