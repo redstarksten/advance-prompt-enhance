@@ -888,21 +888,3 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
-
-
-// Template Prompt untuk mode: text_to_video
-const textToVideoTemplate = `A cinematic, hyper-realistic 8-second video set in [LOKASI dan SETTING VISUAL], styled like a [GAYA SETTING/FANTASY].
-
-A [KARAKTER UTAMA] (sekitar [USIA]), tampil dengan gaya [DESKRIPSI PAKAIAN, AKSESORIS, PENAMPILAN]. Ia berdiri [POSISI / GESTURE UNIK], sambil memegang [BENDA / OBJEK UNIK] bertuliskan "[LABEL UNIK]".
-
-Karakter berpose seperti [PERBANDINGAN DRAMATIS/IKONIK], lalu [TINDAKAN UTAMA yang LUCU / EPIK].
-
-**Ia berbicara dalam Bahasa Indonesia logat [LOGAT]**, penuh [EMOSI / KEANEHAN / ENERGI]:
-
-> "[DIALOG ASLI]"
-
-Setelah itu, karakter mencoba [AKSI KONYOL], namun gagal dan [KEJADIAN KONYOL / SLAPSTICK] — gaya [REFERENSI POP / FILM / PARODI].
-
-**Style**: [SINEMATOGRAFI], [GENRE HUMOR / FANTASY], [WAKTU HARI], [GAYA ANIMASI / PERSPEKTIF]  
-**Language**: Spoken in [BAHASA & AKSEN], no subtitles  
-**Duration**: [Durasi, misalnya 8 seconds]`;
