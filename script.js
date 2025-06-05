@@ -1,3 +1,39 @@
+
+const apiType = document.getElementById("apiType")?.value || "gemini";
+
+async function callAI(systemPrompt, userPrompt, apiKey) {
+  const messages = [
+    { role: "system", content: systemPrompt },
+    { role: "user", content: userPrompt }
+  ];
+
+  if (apiType === "openai") {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        model: "gpt-4o",
+        messages,
+        temperature: 0.8
+      })
+    });
+    const result = await response.json();
+    return result.choices?.[0]?.message?.content?.trim();
+  } else {
+    const response = await fetch("https://generativelabsproxy.deno.dev/api/gemini", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt: systemPrompt + "\n\n" + userPrompt, apiKey })
+    });
+    const result = await response.json();
+    return result.text?.trim();
+  }
+}
+
+
 const modeRadios = document.querySelectorAll('input[name="mode"]');
         const userInput = document.getElementById('user-input');
         const dynamicPromptStructureContainer = document.getElementById('dynamic-prompt-structure');
