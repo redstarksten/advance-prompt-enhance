@@ -945,3 +945,26 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const geminiBtn = document.getElementById("selectGemini");
+  const openaiBtn = document.getElementById("selectOpenAI");
+  const keyAnchor = document.getElementById("getKeyAnchor");
+  const apiTypeSelect = document.getElementById("apiType");
+
+  if (geminiBtn && openaiBtn && keyAnchor && apiTypeSelect) {
+    geminiBtn.addEventListener("click", () => {
+      localStorage.setItem("apiModel", "gemini");
+      apiTypeSelect.value = "gemini";
+      keyAnchor.href = "https://aistudio.google.com/app/apikey?hl=id";
+      keyAnchor.textContent = "🔑 Dapatkan API Key Gemini";
+    });
+
+    openaiBtn.addEventListener("click", () => {
+      localStorage.setItem("apiModel", "openai");
+      apiTypeSelect.value = "openai";
+      keyAnchor.href = "https://platform.openai.com/api-keys";
+      keyAnchor.textContent = "🔑 Dapatkan API Key dari OpenAI";
+    });
+  }
+});
