@@ -28,8 +28,18 @@
         </header>
 
         <section class="api-key-section">
-            <h2 class="text-xl font-semibold text-sky-800 mb-4">Pengaturan API Key Gemini Anda</h2>
+            <h2 class="text-xl font-semibold text-slate-800 dark:text-white mb-2">Pilih Model AI</h2>
             <div id="api-key-input-container">
+                <div class="flex space-x-2 mb-4">
+  <button id="selectGemini" class="px-4 py-2 rounded bg-slate-200 text-slate-900 dark:bg-slate-600 dark:text-white hover:bg-slate-300 dark:hover:bg-slate-500">Gemini</button>
+  <button id="selectOpenAI" class="px-4 py-2 rounded bg-sky-200 text-sky-900 dark:bg-sky-700 dark:text-white hover:bg-sky-300 dark:hover:bg-sky-600">ChatGPT (OpenAI)</button>
+</div>
+
+<div id="getApiKeyLink" class="mb-4">
+  <a id="getKeyAnchor" href="https://aistudio.google.com/app/apikey?hl=id" target="_blank" class="text-blue-600 dark:text-blue-400 underline text-sm">
+    🔑 Dapatkan API Key Gemini
+  </a>
+</div>
                 <div class="input-group">
                     <label for="user-api-key" class="text-sky-700">Masukkan API Key Anda:</label>
                     <input type="password" id="user-api-key" class="input-field" placeholder="AIzaSy...">
