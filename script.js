@@ -1,7 +1,16 @@
 
-const apiType = document.getElementById("apiType")?.value || "gemini";
+const rolePrompts = {
+  karakter: "Kamu adalah kreator karakter fiksi. Buat deskripsi yang konsisten dan sangat mendetail. Sertakan: outfit, umur, warna kulit, gaya rambut, postur tubuh, ekspresi wajah, gaya bicara, dan latar belakang singkat. Gunakan gaya naratif yang hidup.",
+  cinematic: "Kamu adalah penulis naskah film. Tugasmu adalah menulis deskripsi adegan sinematik yang emosional, penuh detail visual, seperti dalam film. Gunakan gaya bahasa dramatis dan puitis.",
+  copywriting: "Kamu adalah copywriter profesional. Buat teks promosi yang padat, persuasif, dan menggugah. Fokus pada manfaat, emosi, dan ajakan bertindak.",
+  lirik: "Kamu adalah penulis lagu. Buat lirik yang ekspresif, berima, dan sesuai dengan suasana. Gunakan imajinasi dan metafora untuk memperkuat emosi.",
+  text_to_video: "Kamu adalah sutradara AI sinematik. Tulis deskripsi video pendek 8 detik yang dramatis dan mengesankan. Gunakan format skrip dengan aksi, dialog, dan gaya sinematografi. Fokus pada adegan yang dapat divisualisasikan.",
+  gambar: "Kamu adalah prompt engineer untuk AI image generator. Buat prompt visual yang eksplisit, konsisten, dan mendetail. Sertakan deskripsi karakter, latar, pakaian, cahaya, gaya kamera, dan suasana."
+};
 
-async function callAI(systemPrompt, userPrompt, apiKey) {
+
+
+async function callAIEnhancer(systemPrompt, userPrompt, apiKey, apiType) {
   const messages = [
     { role: "system", content: systemPrompt },
     { role: "user", content: userPrompt }
@@ -17,10 +26,22 @@ async function callAI(systemPrompt, userPrompt, apiKey) {
       body: JSON.stringify({
         model: "gpt-4o",
         messages,
-        temperature: 0.8
+        temperature: 0.85
       })
     });
     const result = await response.json();
+
+    if (!response.ok) {
+      if (result.error && result.error.message) {
+        const msg = result.error.message;
+        if (msg.includes("You exceeded your current quota") || msg.includes("invalid_api_key")) {
+          alert("⚠️ API Key OpenAI Anda tidak valid atau sudah mencapai limit. Silakan cek atau buat API Key baru.");
+        }
+        throw new Error(msg);
+      }
+      throw new Error("Gagal mengakses OpenAI API.");
+    }
+
     return result.choices?.[0]?.message?.content?.trim();
   } else {
     const response = await fetch("https://generativelabsproxy.deno.dev/api/gemini", {
