@@ -228,23 +228,3 @@ body.dark {
     background-color: #1e1e2f;
     color: #ffffff;
 }
-
-/* Improve dark/light mode font visibility */
-body.dark {
-  background-color: #0f172a;
-  color: #ffffff;
-}
-body {
-  background-color: #ffffff;
-  color: #1e293b;
-}
-input, select, textarea {
-  background-color: #ffffff;
-  color: #1e293b;
-}
-body.dark input, 
-body.dark select,
-body.dark textarea {
-  background-color: #1e293b;
-  color: #ffffff;
-}
