@@ -1,50 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Prompt Generator</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prompt Generator Enhancer</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>AI Prompt Generator Enhancer</h1>
-        </header>
-        
-        <!-- API Key Input Section -->
-        <div class="api-key-section">
-            <label for="api-key">Enter API Key:</label>
-            <input type="text" id="api-key" placeholder="Your API Key">
-            <button onclick="window.location.href='https://aistudio.google.com/app/apikey?hl=id'">Get API Key Gemini</button>
-        </div>
+  <header>
+    <h1>Prompt Generator Enhancer</h1>
+  </header>
 
-        <!-- Mode Selector -->
-        <div class="mode-selection">
-            <label for="mode-select">Select Mode:</label>
-            <select id="mode-select" onchange="setMode()">
-                <option value="image">Prompt Image</option>
-                <option value="video">Text to Video (Veo3)</option>
-                <option value="image-video">Image to Video</option>
-                <option value="narrative">Narrative Script</option>
-            </select>
-        </div>
+  <section id="apikey-section">
+    <label for="apikey">API Key:</label>
+    <input type="text" id="apikey" placeholder="Enter your Gemini API Key" />
+    <button id="save-apikey" onclick="saveApiKey()">Simpan API Key</button>
+    <button id="get-apikey" onclick="window.open('https://aistudio.google.com/app/apikey', '_blank')">Get API Key</button>
+  </section>
 
-        <!-- Mode Content Section -->
-        <div id="mode-content">
-            <!-- Dynamic content will load based on selected mode -->
-        </div>
+  <section id="mode-selector">
+    <h2>Select Mode</h2>
+    <button onclick="showMode('image-prompt')">Prompt Gambar</button>
+    <button onclick="showMode('text-to-video')">Text to Video (Veo3)</button>
+    <button onclick="showMode('image-to-video')">Image to Video</button>
+    <button onclick="showMode('narrative')">Narasi</button>
+  </section>
 
-        <!-- Result Section -->
-        <div class="result-section">
-            <textarea id="result-prompt" placeholder="Generated Prompt"></textarea>
-            <div class="buttons">
-                <button onclick="copyPrompt('en')">Copy Prompt (English)</button>
-                <button onclick="copyPrompt('id')">Copy Prompt (Indonesian)</button>
-            </div>
-        </div>
+  <section id="mode-forms">
+    <div id="image-prompt" class="mode-form">
+      <h3>Prompt Gambar dengan Karakter Konsisten</h3>
+      <label>Jenis Kelamin:
+        <select id="gender">
+          <option>Pria</option>
+          <option>Wanita</option>
+          <option>Lainnya</option>
+        </select>
+      </label>
+      <label>Usia:
+        <input type="text" id="age" placeholder="Contoh: 25 tahun" />
+      </label>
+      <label>Gaya Rambut:
+        <input type="text" id="hairStyle" placeholder="Contoh: Rambut pendek rapi" />
+      </label>
+      <label>Warna Kulit:
+        <input type="text" id="skinColor" placeholder="Contoh: Putih bersih" />
+      </label>
+      <label>Outfit:
+        <input type="text" id="outfit" placeholder="Contoh: Jaket kulit hitam" />
+      </label>
+      <button onclick="generateImagePrompt()">Generate Prompt</button>
     </div>
 
-    <script src="script.js"></script>
+    <div id="text-to-video" class="mode-form">
+      <h3>Text to Video (Veo3)</h3>
+      <label for="language">Bahasa / Aksen:</label>
+      <select id="language">
+        <option value="english">English (US/UK)</option>
+        <option value="indonesian">Bahasa Indonesia</option>
+      </select>
+      <label for="dialog">Dialog:</label>
+      <textarea id="dialog" placeholder="Masukkan dialog atau narasi..." rows="4"></textarea>
+      <button onclick="generateTextToVideo()">Generate Prompt</button>
+    </div>
+
+    <div id="image-to-video" class="mode-form">
+      <h3>Image to Video</h3>
+      <label for="movement">Pergerakan Kamera:</label>
+      <select id="cameraMovement">
+        <option>Static</option>
+        <option>Tracking Shot</option>
+        <option>Dolly Zoom</option>
+        <option>Crane Shot</option>
+      </select>
+      <label for="effect">Efek Visual:</label>
+      <select id="visualEffect">
+        <option>Cinematic</option>
+        <option>Dreamy</option>
+        <option>Dark Mood</option>
+        <option>High Saturation</option>
+      </select>
+      <button onclick="generateImageToVideo()">Generate Prompt</button>
+    </div>
+
+    <div id="narrative" class="mode-form">
+      <h3>Narasi Profesional</h3>
+      <label for="narrativeInput">Ide Cerita / Tema:</label>
+      <textarea id="narrativeInput" placeholder="Masukkan ide cerita singkat..." rows="4"></textarea>
+      <button onclick="generateNarrative()">Generate Prompt</button>
+    </div>
+  </section>
+
+  <section id="result-section">
+    <h3>Hasil Prompt</h3>
+    <div id="result-en"></div>
+    <button onclick="copyPrompt('result-en')">Copy Prompt (EN)</button>
+    <div id="result-id"></div>
+    <button onclick="copyPrompt('result-id')">Copy Prompt (ID)</button>
+  </section>
+
+  <script src="apikey.js"></script>
+  <script src="generator.js"></script>
+  <script src="main.js"></script>
 </body>
 </html>
