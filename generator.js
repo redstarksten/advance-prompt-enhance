@@ -8,8 +8,13 @@ function generateImagePrompt() {
   const expression = document.getElementById('facialExpression').value;
   const background = document.getElementById('background').value;
   const stylePresetImage = document.getElementById('stylePresetImage').value;
-  const promptEn = `Style: ${stylePresetImage}. A consistent character: ${gender}, ${age}, hairstyle: ${hairStyle}, skin: ${skinColor}, outfit: ${outfit}, facial expression: ${expression}, background: ${background}.`;
-  const promptId = `Karakter konsisten: ${gender}, ${age}, gaya rambut: ${hairStyle}, kulit: ${skinColor}, outfit: ${outfit}, ekspresi wajah: ${expression}, latar belakang: ${background}.`;
+  
+    const height = document.getElementById('height').value;
+    const bodyType = document.getElementById('bodyType').value;
+    const eyeColor = document.getElementById('eyeColor').value;
+    const specialFeature = document.getElementById('specialFeature').value;
+    const promptEn = `Style: ${stylePresetImage}. A consistent character: ${gender}, ${age}, hairstyle: ${hairStyle}, skin: ${skinColor}, outfit: ${outfit}, height: ${height}, body: ${bodyType}, eyes: ${eyeColor}, special: ${specialFeature}, facial expression: ${expression}, background: ${background}.`; ${gender}, ${age}, hairstyle: ${hairStyle}, skin: ${skinColor}, outfit: ${outfit}, facial expression: ${expression}, background: ${background}.`;
+  const promptId = `Karakter konsisten: ${gender}, ${age}, gaya rambut: ${hairStyle}, kulit: ${skinColor}, outfit: ${outfit}, tinggi: ${height}, tubuh: ${bodyType}, mata: ${eyeColor}, ciri khas: ${specialFeature}, ekspresi wajah: ${expression}, latar belakang: ${background}.`;
 
   document.getElementById('result-en').innerText = promptEn;
   document.getElementById('result-id').innerText = promptId;
@@ -22,8 +27,13 @@ function generateTextToVideo() {
   const genre = document.getElementById('genre').value;
   const mood = document.getElementById('mood').value;
   const stylePresetVideo = document.getElementById('stylePresetVideo').value;
-  const promptEn = `Style: ${stylePresetVideo}. Veo3 structure: genre: ${genre}, mood: ${mood}, dialogue: [${lang === 'english' ? 'English' : 'Indonesian'}] ${dialog}`;
-  const promptId = `Struktur Veo3: genre: ${genre}, suasana: ${mood}, dialog: [${lang === 'indonesian' ? 'Bahasa Indonesia' : 'Bahasa Inggris'}] ${dialog}`;
+  
+    const charGender = document.getElementById('charGender').value;
+    const charAge = document.getElementById('charAge').value;
+    const charLook = document.getElementById('charLook').value;
+    const charOutfit = document.getElementById('charOutfit').value;
+    const promptEn = `Style: ${stylePresetVideo}. Consistent character: ${charGender}, ${charAge}, look: ${charLook}, outfit: ${charOutfit}. Veo3 structure: genre: ${genre}, mood: ${mood}, dialogue: [${lang === 'english' ? 'English' : 'Indonesian'}] ${dialog}`;
+  const promptId = `Karakter konsisten: ${charGender}, ${charAge}, penampilan: ${charLook}, outfit: ${charOutfit}. Struktur Veo3: genre: ${genre}, suasana: ${mood}, dialog: [${lang === 'indonesian' ? 'Bahasa Indonesia' : 'Bahasa Inggris'}] ${dialog}`;
 
   document.getElementById('result-en').innerText = promptEn;
   document.getElementById('result-id').innerText = promptId;
