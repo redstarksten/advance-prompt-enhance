@@ -48,7 +48,25 @@
       <label>Outfit:
         <input type="text" id="outfit" placeholder="Contoh: Jaket kulit hitam" />
       </label>
+      
+      
+    <label for="stylePresetImage">Gaya Visual:</label>
+    <select id="stylePresetImage">
+      <option value="">-- Pilih Gaya --</option>
+      <option value="Realistic">Realistic</option>
+<option value="Anime">Anime</option>
+<option value="Cartoon">Cartoon</option>
+<option value="Cyberpunk">Cyberpunk</option>
+<option value="Vintage">Vintage</option>
+    </select>
+    <label>Ekspresi Wajah:
+        <input type="text" id="facialExpression" placeholder="Contoh: Tersenyum cerah" />
+      </label>
+      <label>Latar Belakang:
+        <input type="text" id="background" placeholder="Contoh: Pegunungan bersalju" />
+      </label>
       <button onclick="generateImagePrompt()">Generate Prompt</button>
+    
     </div>
 
     <div id="text-to-video" class="mode-form">
@@ -60,7 +78,23 @@
       </select>
       <label for="dialog">Dialog:</label>
       <textarea id="dialog" placeholder="Masukkan dialog atau narasi..." rows="4"></textarea>
+      
+      
+    <label for="stylePresetVideo">Gaya Video:</label>
+    <select id="stylePresetVideo">
+      <option value="">-- Pilih Gaya --</option>
+      <option value="Drama">Drama</option>
+<option value="Action">Action</option>
+<option value="Fantasy">Fantasy</option>
+<option value="Sci-Fi">Sci-Fi</option>
+<option value="Comedy">Comedy</option>
+    </select>
+    <label for="genre">Genre:</label>
+      <input type="text" id="genre" placeholder="Contoh: Drama keluarga" />
+      <label for="mood">Suasana:</label>
+      <input type="text" id="mood" placeholder="Contoh: Emosional dan hangat" />
       <button onclick="generateTextToVideo()">Generate Prompt</button>
+    
     </div>
 
     <div id="image-to-video" class="mode-form">
@@ -79,14 +113,46 @@
         <option>Dark Mood</option>
         <option>High Saturation</option>
       </select>
+      
+      
+    <label for="stylePresetImageVideo">Gaya Penyutradaraan:</label>
+    <select id="stylePresetImageVideo">
+      <option value="">-- Pilih Gaya --</option>
+      <option value="Epic">Epic</option>
+<option value="Romantic">Romantic</option>
+<option value="Suspense">Suspense</option>
+<option value="Mystical">Mystical</option>
+<option value="Documentary">Documentary</option>
+    </select>
+    <label for="duration">Durasi Adegan:</label>
+      <input type="text" id="duration" placeholder="Contoh: 10 detik" />
+      <label for="objectMotion">Arah Gerakan Objek:</label>
+      <input type="text" id="objectMotion" placeholder="Contoh: Dari kiri ke kanan" />
       <button onclick="generateImageToVideo()">Generate Prompt</button>
+    
     </div>
 
     <div id="narrative" class="mode-form">
       <h3>Narasi Profesional</h3>
       <label for="narrativeInput">Ide Cerita / Tema:</label>
       <textarea id="narrativeInput" placeholder="Masukkan ide cerita singkat..." rows="4"></textarea>
+      
+      
+    <label for="stylePresetNarrative">Gaya Narasi:</label>
+    <select id="stylePresetNarrative">
+      <option value="">-- Pilih Gaya --</option>
+      <option value="Inspirational">Inspirational</option>
+<option value="Tragic">Tragic</option>
+<option value="Humorous">Humorous</option>
+<option value="Dark">Dark</option>
+<option value="Uplifting">Uplifting</option>
+    </select>
+    <label for="tone">Gaya Penceritaan:</label>
+      <input type="text" id="tone" placeholder="Contoh: Inspiratif dan menyentuh" />
+      <label for="scriptType">Jenis Naskah:</label>
+      <input type="text" id="scriptType" placeholder="Contoh: Naskah film pendek" />
       <button onclick="generateNarrative()">Generate Prompt</button>
+    
     </div>
   </section>
 
